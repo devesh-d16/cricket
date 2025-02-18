@@ -29,7 +29,9 @@ public class MatchService {
 
     public Match startMatch(StartMatchRequestDTO startMatchRequestDTO) {
         Team team1 = teamService.getTeamById(startMatchRequestDTO.getTeam1Id());
+        team1.resetTeam();
         Team team2 = teamService.getTeamById(startMatchRequestDTO.getTeam2Id());
+        team2.resetTeam();
 
         Match match = new Match();
         match.setTeam1(team1);

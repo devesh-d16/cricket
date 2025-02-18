@@ -37,4 +37,9 @@ public class Team {
             this.totalWickets++;
         }
     }
+
+    public void resetTeam(){
+        this.totalRuns = 0;
+        this.totalWickets = 0;
+    }
 }
