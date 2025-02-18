@@ -8,16 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/*
-API Endpoints I have to make
-
-POST /start -> to start the game
-GET /{matchId} -> details of match
-POST /{matchId}/status -> live match status
-GET /{matchId}/result -> result of match
-DELETE /{matchId} -> delete match from database
-
-*/
 
 @RestController
 @RequestMapping("/apis/matches")

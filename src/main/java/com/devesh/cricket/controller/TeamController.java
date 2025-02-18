@@ -10,17 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-/*
-API Endpoints I have to make
-
-POST /create -> create new team
-GET /{teamId} -> fetch team details
-GET /all -> return all teams
-GET /{teamId}/update -> update player detail
-DELETE /{teamId} -> delete a team
-*/
-
 @RestController
 @RequestMapping("/apis/teams")
 public class TeamController {

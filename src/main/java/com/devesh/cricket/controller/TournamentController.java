@@ -10,15 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-/*
-API Endpoints I have to make
-
-POST /start -> to start the game or tournament
-GET /status -> current status of game
-POST /reset -> to restart the game
-GET /history -> all past games
-
-*/
 
 @RestController
 @RequestMapping("/apis/tournaments")

@@ -2,29 +2,39 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.dto.ResultDTO;
 import com.devesh.cricket.dto.StartMatchRequestDTO;
-import com.devesh.cricket.model.Inning;
-import com.devesh.cricket.model.Match;
-import com.devesh.cricket.model.Team;
+import com.devesh.cricket.model.*;
 import com.devesh.cricket.model.enums.Status;
 import com.devesh.cricket.repository.MatchRepository;
+import com.devesh.cricket.repository.PlayerMatchStatsRepository;
+import com.devesh.cricket.repository.TeamMatchStatsRepository;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Scope("prototype")
 public class MatchService {
 
     private final MatchRepository matchRepository;
     private final TeamService teamService;
     private final InningService inningService;
     private final ResultService resultService;
+    private final PlayerMatchStats playerMatchStats;
+    private final PlayerMatchStatsRepository playerMatchStatsRepository;
+    private final TeamMatchStats teamMatchStats;
+    private final TeamMatchStatsRepository teamMatchStatsRepository;
 
-    public MatchService(MatchRepository matchRepository, TeamService teamService, InningService inningService, ResultService resultService) {
+    public MatchService(MatchRepository matchRepository, TeamService teamService, InningService inningService, ResultService resultService, PlayerMatchStats playerMatchStats, PlayerMatchStatsRepository playerMatchStatsRepository, TeamMatchStats teamMatchStats, TeamMatchStatsRepository teamMatchStatsRepository) {
         this.matchRepository = matchRepository;
         this.teamService = teamService;
         this.inningService = inningService;
         this.resultService = resultService;
+        this.playerMatchStats = playerMatchStats;
+        this.playerMatchStatsRepository = playerMatchStatsRepository;
+        this.teamMatchStats = teamMatchStats;
+        this.teamMatchStatsRepository = teamMatchStatsRepository;
     }
 
 
@@ -37,8 +47,6 @@ public class MatchService {
         match.setTeam2(team2);
         match.setOvers(20);
         match.setMatchStatus(Status.ONGOING);
-
-        // Save match first to generate matchId
         match = matchRepository.save(match);
 
         List<Inning> matchInnings = new ArrayList<>();
@@ -57,17 +65,14 @@ public class MatchService {
         match.setCompleted(true);
         match.setMatchStatus(Status.COMPLETED);
 
-        // Evaluate match result
         ResultDTO result = resultService.evaluateResult(firstInnings, secondInnings);
         match.setWinningTeam(result.getWinningTeam());
         match.setWinningMargin(result.getWinningMargin());
         match.setWinningCondition(result.getWinningCondition());
 
-        matchRepository.save(match); // Save match again with updated values
+        matchRepository.save(match);
         return match;
     }
-
-
 }
 
 

@@ -24,32 +24,33 @@ public class OverService {
         this.overRepository = overRepository;
     }
 
-
     public void simulateOver(Over over, Team batting, int targetRun, StrikePair strikePair) {
-        Ball newBall = new Ball();
         List<Ball> balls = new ArrayList<>();
-
-        newBall.setOverNumber(over.getOverNumber());
-        newBall.setOver(over);
 
         if (over.getId() == null) {
             overRepository.save(over);
         }
 
-        for (int ballNo = 1; (ballNo <= GameConfig.BALLS_PER_OVER) && (!gameLogicService.gameEnd(batting, targetRun)); ballNo++) {
+        for (int ballNo = 1; ballNo <= GameConfig.BALLS_PER_OVER && (!gameLogicService.gameEnd(batting, targetRun)); ballNo++) {
+            Ball newBall = new Ball();
+
+            newBall.setOverNumber(over.getOverNumber());
+            newBall.setOver(over);
             newBall.setBallNumber(ballNo);
+
             ballService.simulateBall(newBall, batting, strikePair, targetRun);
-            balls.add(newBall);
 
             if (newBall.isWicket()) {
                 over.addWicket();
             }
             over.addRuns(newBall.getRunsScored());
+
+            balls.add(newBall);
+
         }
 
         over.setBalls(balls);
         overRepository.save(over);
-        gameLogicService.swapStrikers(strikePair);
     }
 
 }

@@ -1,12 +1,16 @@
 package com.devesh.cricket.model;
 
 import com.devesh.cricket.model.enums.PlayerRole;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-@Data
-//@Entity
+@Getter
+@Setter
+@RequiredArgsConstructor
+@Entity
 public class PlayerMatchStats {
 
     @Id
@@ -19,15 +23,28 @@ public class PlayerMatchStats {
     private int ballsBowled = 0;
     private int runsConceded = 0;
 
+    @Enumerated(EnumType.STRING)
+    private PlayerRole playerRole;
+
     @ManyToOne
-    @JoinColumn(name = "player_id")
+    @JoinColumn(
+            name = "player_id"
+    )
     private Player player;
 
     @ManyToOne
-    @JoinColumn(name = "match_id")
+    @JoinColumn(
+            name = "match_id"
+    )
     private Match match;
 
-    @Enumerated(EnumType.STRING)
-    private PlayerRole playerRole;
+
+    public void addRuns(int runs) {
+        this.runsScored += runs;
+    }
+
+    public void addBallFaced() {
+        this.ballsFaced++;
+    }
 
 }

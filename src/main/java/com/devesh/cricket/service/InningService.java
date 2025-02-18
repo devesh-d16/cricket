@@ -26,13 +26,10 @@ public class InningService {
     public void startInnings(Inning inning, Team battingTeam, Team bowlingTeam, int targetRun) {
         inning.setBattingTeam(battingTeam);
         inning.setBowlingTeam(bowlingTeam);
+        inningRepository.save(inning);
 
         int overs = inning.getMatch().getOvers();
         StrikePair strikePair = new StrikePair(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
-
-        if (inning.getId() == null) {
-            inningRepository.save(inning);
-        }
 
         List<Over> overList = new ArrayList<>();
         for (int overNo = 1; overNo <= overs && (!gameLogicService.gameEnd(battingTeam, targetRun)); overNo++) {
@@ -51,6 +48,5 @@ public class InningService {
         inning.setOvers(overList);
         inningRepository.save(inning);
     }
-
 
 }

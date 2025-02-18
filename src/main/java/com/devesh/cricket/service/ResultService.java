@@ -19,10 +19,10 @@ public class ResultService {
             resultDTO.setWinningCondition(firstInnings.getBattingTeam().getTeamName() + " won the game by " + String.valueOf(runs) + " runs.");
         }
         else if(runsScoredByTeam1 < runsScoredByTeam2){
-            int wickets = secondInnings.getBattingTeam().getTotalWickets();
+            int wicketsMargin = 10 - secondInnings.getBattingTeam().getTotalWickets();
             resultDTO.setWinningTeam(secondInnings.getBattingTeam());
-            resultDTO.setWinningMargin(10 - wickets);
-            resultDTO.setWinningCondition(secondInnings.getBattingTeam().getTeamName() + " won the game by " + String.valueOf(wickets) + " wickets.");
+            resultDTO.setWinningMargin(wicketsMargin);
+            resultDTO.setWinningCondition(secondInnings.getBattingTeam().getTeamName() + " won the game by " + String.valueOf(wicketsMargin) + " wickets.");
         }
         else{
             resultDTO.setWinningTeam(null);

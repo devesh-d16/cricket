@@ -20,7 +20,7 @@ public class GameLogicService {
     }
 
     public boolean gameEnd(Team batting, int targetRun) {
-        return (batting.getTotalWickets() == 10 || (targetRun != -1 && batting.getTotalWickets() > targetRun));
+        return (batting.getTotalWickets() == 10 || (targetRun != -1 && batting.getTotalRuns() > targetRun));
     }
 
     public void swapStrikers(StrikePair strikePair) {
@@ -38,7 +38,7 @@ public class GameLogicService {
     public int getRandomWeightScore(int[] weights) {
 
         int totalWeight = 0;
-        for(int weight : weights) {
+        for (int weight : weights) {
             totalWeight += weight;
         }
 
@@ -46,14 +46,15 @@ public class GameLogicService {
         int randomWeight = random.nextInt(totalWeight);
 
         int cumulativeWeight = 0;
-        for(int i = 0; i < weights.length; i++) {
+        for (int i = 0; i < weights.length; i++) {
             cumulativeWeight += weights[i];
-            if(cumulativeWeight >= randomWeight) {
+            if (cumulativeWeight >= randomWeight) {
                 return GameConfig.SCORING_OPTIONS[i];
             }
         }
         return GameConfig.SCORING_OPTIONS[0];
     }
+
     public int getRandomBatterWeightScore() {
         return getRandomWeightScore(GameConfig.BATTER_WEIGHT);
     }
@@ -63,12 +64,11 @@ public class GameLogicService {
     }
 
     public int getTotalMatches(int totalTeams) {
-        int leagueMatches = (totalTeams) * (totalTeams - 1)/2;
+        int leagueMatches = (totalTeams) * (totalTeams - 1) / 2;
         int knockoutMatches = 3;
         return leagueMatches + knockoutMatches;
     }
-
-
+}
 
 
 ///////////////////////////
@@ -135,4 +135,3 @@ public class GameLogicService {
 //        }
 //    }
 
-}
