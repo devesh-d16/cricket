@@ -6,7 +6,6 @@ import com.devesh.cricket.model.Tournament;
 import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
 import com.devesh.cricket.repository.TournamentRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

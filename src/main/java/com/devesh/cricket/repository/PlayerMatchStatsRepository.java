@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface PlayerMatchStatsRepository extends JpaRepository<PlayerMatchStats, Long>{
+//@Repository
+public interface PlayerMatchStatsRepository{
     List<PlayerMatchStats> findByMatch(Match match);
     List<PlayerMatchStats> findByPlayer(Player player);
 }

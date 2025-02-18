@@ -1,7 +1,6 @@
 package com.devesh.cricket.model;
 
 import com.devesh.cricket.model.enums.PlayerRole;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -5,38 +5,27 @@ import com.devesh.cricket.dto.StartMatchRequestDTO;
 import com.devesh.cricket.model.*;
 import com.devesh.cricket.model.enums.Status;
 import com.devesh.cricket.repository.MatchRepository;
-import com.devesh.cricket.repository.PlayerMatchStatsRepository;
-import com.devesh.cricket.repository.TeamMatchStatsRepository;
-import org.springframework.context.annotation.Scope;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Scope("prototype")
 public class MatchService {
 
-    private final MatchRepository matchRepository;
     private final TeamService teamService;
     private final InningService inningService;
     private final ResultService resultService;
-    private final PlayerMatchStats playerMatchStats;
-    private final PlayerMatchStatsRepository playerMatchStatsRepository;
-    private final TeamMatchStats teamMatchStats;
-    private final TeamMatchStatsRepository teamMatchStatsRepository;
+    private final MatchRepository matchRepository;
 
-    public MatchService(MatchRepository matchRepository, TeamService teamService, InningService inningService, ResultService resultService, PlayerMatchStats playerMatchStats, PlayerMatchStatsRepository playerMatchStatsRepository, TeamMatchStats teamMatchStats, TeamMatchStatsRepository teamMatchStatsRepository) {
-        this.matchRepository = matchRepository;
+
+    public MatchService(TeamService teamService, InningService inningService, ResultService resultService, MatchRepository matchRepository) {
         this.teamService = teamService;
         this.inningService = inningService;
         this.resultService = resultService;
-        this.playerMatchStats = playerMatchStats;
-        this.playerMatchStatsRepository = playerMatchStatsRepository;
-        this.teamMatchStats = teamMatchStats;
-        this.teamMatchStatsRepository = teamMatchStatsRepository;
+        this.matchRepository = matchRepository;
     }
-
 
     public Match startMatch(StartMatchRequestDTO startMatchRequestDTO) {
         Team team1 = teamService.getTeamById(startMatchRequestDTO.getTeam1Id());
