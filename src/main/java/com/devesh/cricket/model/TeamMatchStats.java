@@ -22,15 +22,11 @@ public class TeamMatchStats {
     private boolean isWinner;
 
     @ManyToOne
-    @JoinColumn(
-            name = "team_id"
-    )
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @ManyToOne
-    @JoinColumn(
-            name = "match_id"
-    )
+    @JoinColumn(name = "match_id")
     private Match match;
 
 
@@ -44,5 +40,18 @@ public class TeamMatchStats {
 
     public void addWicket() {
         this.totalWickets++;
+    }
+
+    public void reset(){
+        this.totalRuns = 0;
+        this.totalWickets = 0;
+        this.totalOvers = 0;
+        for(PlayerMatchStats p : players){
+            p.setBallsBowled(0);
+            p.setBallsFaced(0);
+            p.setRunsConceded(0);
+            p.setRunsScored(0);
+            p.setWicketsTaken(0);
+        }
     }
 }

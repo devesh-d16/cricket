@@ -18,7 +18,7 @@ public class Team {
 
     private String teamName;
     private int totalRuns = 0;
-    private int totalWickets = 0;
+//    private int totalWickets = 0;
 
     @ManyToMany(mappedBy = "teams")
     @JsonIgnore
@@ -32,14 +32,13 @@ public class Team {
         this.totalRuns += runs;
     }
 
-    public void incrementWickets() {
-        if (this.totalWickets < 10) {
-            this.totalWickets++;
-        }
-    }
+//    public void incrementWickets() {
+//        if (this.totalWickets < 10) {
+//            this.totalWickets++;
+//        }
+//    }
 
     public void resetTeam(){
         this.totalRuns = 0;
-        this.totalWickets = 0;
     }
 }

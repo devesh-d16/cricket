@@ -37,10 +37,7 @@ public class Tournament {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(
-            mappedBy = "tournament",
-            cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Match> matches;
 

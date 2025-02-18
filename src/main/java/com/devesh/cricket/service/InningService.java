@@ -32,12 +32,12 @@ public class InningService {
         StrikePair strikePair = new StrikePair(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
 
         List<Over> overList = new ArrayList<>();
-        for (int overNo = 1; overNo <= overs && (!gameLogicService.gameEnd(battingTeam, targetRun)); overNo++) {
+        for (int overNo = 1; overNo <= overs && (!gameLogicService.gameEnd(battingTeam, inning, targetRun)); overNo++) {
             Over over = new Over();
             over.setInning(inning);
             over.setOverNumber(overNo);
 
-            overService.simulateOver(over, battingTeam, targetRun, strikePair);
+            overService.simulateOver(inning, over, battingTeam, targetRun, strikePair);
             overList.add(over);
 
             inning.addRuns(over.getRunsScored());

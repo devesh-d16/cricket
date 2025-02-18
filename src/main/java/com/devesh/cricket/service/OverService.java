@@ -2,6 +2,7 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.config.GameConfig;
 import com.devesh.cricket.model.Ball;
+import com.devesh.cricket.model.Inning;
 import com.devesh.cricket.model.Over;
 import com.devesh.cricket.model.Team;
 import com.devesh.cricket.repository.OverRepository;
@@ -24,21 +25,21 @@ public class OverService {
         this.overRepository = overRepository;
     }
 
-    public void simulateOver(Over over, Team batting, int targetRun, StrikePair strikePair) {
+    public void simulateOver(Inning inning, Over over, Team batting, int targetRun, StrikePair strikePair) {
         List<Ball> balls = new ArrayList<>();
 
         if (over.getId() == null) {
             overRepository.save(over);
         }
 
-        for (int ballNo = 1; ballNo <= GameConfig.BALLS_PER_OVER && (!gameLogicService.gameEnd(batting, targetRun)); ballNo++) {
+        for (int ballNo = 1; ballNo <= GameConfig.BALLS_PER_OVER && (!gameLogicService.gameEnd(batting, inning, targetRun)); ballNo++) {
             Ball newBall = new Ball();
 
             newBall.setOverNumber(over.getOverNumber());
             newBall.setOver(over);
             newBall.setBallNumber(ballNo);
 
-            ballService.simulateBall(newBall, batting, strikePair, targetRun);
+            ballService.simulateBall(inning, newBall, batting, strikePair, targetRun);
 
             if (newBall.isWicket()) {
                 over.addWicket();

@@ -27,34 +27,23 @@ public class Match {
 
     // understand
     @ManyToOne
-    @JoinColumn(
-            name = "tournament_id"
-    )
+    @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
     @ManyToOne
-    @JoinColumn(
-            name = "team1_id"
-    )
+    @JoinColumn(name = "team1_id")
     private Team team1;
 
     @ManyToOne
-    @JoinColumn(
-            name = "team2_id"
-    )
+    @JoinColumn(name = "team2_id")
     private Team team2;
 
-    @OneToMany(
-            mappedBy = "match",
-            cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Inning> innings;
 
     @ManyToOne
-    @JoinColumn(
-            name = "winning_team_id"
-    )
+    @JoinColumn(name = "winning_team_id")
     private Team winningTeam;
 
 }

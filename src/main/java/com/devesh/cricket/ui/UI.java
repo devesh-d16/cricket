@@ -48,10 +48,10 @@ public class UI {
 
     public void displayInningsEndMessage(Team team) {
         int runs = team.getTotalRuns();
-        int wickets = team.getTotalWickets();
+//        int wickets = team.getTotalWickets();
 
         System.out.println();
-        System.out.println("Runs scored by " + team.getTeamName() + " : " + runs + "/" + wickets);
+//        System.out.println("Runs scored by " + team.getTeamName() + " : " + runs + "/" + wickets);
         System.out.println();
         System.out.println("---------------------------------------------------------------");
         System.out.println("--------------------------Innings Over-------------------------");
@@ -68,8 +68,8 @@ public class UI {
             System.out.println(teamWon.getTeamName() + " won by " + difference + " runs.");
         }
         else{
-            int difference = 10 - teamWon.getTotalWickets();
-            System.out.println(teamWon.getTeamName() + " won by " + difference + " wickets.");
+//            int difference = 10 - teamWon.getTotalWickets();
+//            System.out.println(teamWon.getTeamName() + " won by " + difference + " wickets.");
         }
         System.out.println("---------------------------------------------------------------");
         System.out.println();

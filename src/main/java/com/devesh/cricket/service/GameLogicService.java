@@ -1,6 +1,7 @@
 package com.devesh.cricket.service;
 
 import com.devesh.cricket.config.GameConfig;
+import com.devesh.cricket.model.Inning;
 import com.devesh.cricket.model.Player;
 import com.devesh.cricket.model.Team;
 import com.devesh.cricket.ui.UI;
@@ -19,14 +20,14 @@ public class GameLogicService {
         this.utils = utils;
     }
 
-    public boolean gameEnd(Team batting, int targetRun) {
-        return (batting.getTotalWickets() == 10 || (targetRun != -1 && batting.getTotalRuns() > targetRun));
+    public boolean gameEnd(Team batting, Inning inning, int targetRun) {
+        return (inning.getTotalWickets() == 10 || (targetRun != -1 && batting.getTotalRuns() > targetRun));
     }
 
     public void swapStrikers(StrikePair strikePair) {
-        Player temp = strikePair.playerOnStrike;
-        strikePair.playerOnStrike = strikePair.playerOffStrike;
-        strikePair.playerOffStrike = temp;
+        Player temp = strikePair.getPlayerOnStrike();
+        strikePair.setPlayerOffStrike(strikePair.getPlayerOffStrike());
+        strikePair.setPlayerOffStrike(temp);
     }
 
     public void rotateStrike(int run, StrikePair strikePair) {

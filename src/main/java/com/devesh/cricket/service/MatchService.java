@@ -19,7 +19,6 @@ public class MatchService {
     private final ResultService resultService;
     private final MatchRepository matchRepository;
 
-
     public MatchService(TeamService teamService, InningService inningService, ResultService resultService, MatchRepository matchRepository) {
         this.teamService = teamService;
         this.inningService = inningService;

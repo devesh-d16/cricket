@@ -25,21 +25,15 @@ public class PlayerMatchStats {
     private PlayerRole playerRole;
 
     @ManyToOne
-    @JoinColumn(
-            name = "player_id"
-    )
+    @JoinColumn(name = "player_id")
     private Player player;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "match_id"
-    )
-    private Match match;
+//    @ManyToOne
+//    @JoinColumn(name = "match_id")
+//    private Match match;
 
     @ManyToOne
-    @JoinColumn(
-            name = "team_id"
-    )
+    @JoinColumn(name = "team_id")
     private TeamMatchStats teamMatchStats;
 
     public void addRuns(int runs) {
@@ -49,5 +43,4 @@ public class PlayerMatchStats {
     public void addBallFaced() {
         this.ballsFaced++;
     }
-
 }

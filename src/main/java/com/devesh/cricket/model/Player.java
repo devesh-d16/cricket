@@ -4,8 +4,6 @@ import com.devesh.cricket.model.enums.PlayerRole;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -29,15 +27,11 @@ public class Player {
 
     // understand
     @ManyToOne
-    @JoinColumn(
-            name = "team_id"
-    )
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @ManyToOne
-    @JoinColumn(
-            name = "match_id"
-    )
+    @JoinColumn(name = "match_id")
     private Match match;
 
     // methods

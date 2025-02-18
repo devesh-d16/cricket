@@ -1,6 +1,5 @@
 package com.devesh.cricket.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,21 +20,15 @@ public class Ball {
 
     // understand
     @ManyToOne
-    @JoinColumn(
-            name = "over_id"
-    )
+    @JoinColumn(name = "over_id")
     private Over over;
 
     @ManyToOne
-    @JoinColumn(
-            name = "batsman_id"
-    )
+    @JoinColumn(name = "batsman_id")
     private Player batsman;
 
     @ManyToOne
-    @JoinColumn(
-            name = "bowler_id"
-    )
+    @JoinColumn(name = "bowler_id")
     private Player bowler;
 
 }

@@ -1,10 +1,13 @@
 package com.devesh.cricket.utils;
 
 import com.devesh.cricket.model.Player;
+import lombok.*;
 
+@Getter
+@Setter
 public class StrikePair {
-    public Player playerOnStrike;
-    public Player playerOffStrike;
+    private Player playerOnStrike;
+    private Player playerOffStrike;
     private int nextBat = 2;
 
     public int getNextBatsman() {
