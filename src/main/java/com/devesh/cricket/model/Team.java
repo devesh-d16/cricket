@@ -20,9 +20,6 @@ public class Team {
     private int totalRuns = 0;
 //    private int totalWickets = 0;
 
-    @ManyToMany(mappedBy = "teams")
-    @JsonIgnore
-    private List<Tournament> tournaments;
 
     @OneToMany(mappedBy = "team")
     @JsonIgnore

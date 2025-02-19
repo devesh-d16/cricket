@@ -8,12 +8,14 @@ import lombok.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-//@Entity
+@Entity
 public class PlayerMatchStats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String playerName;
 
     private int runsScored = 0;
     private int ballsFaced = 0;
@@ -40,7 +42,7 @@ public class PlayerMatchStats {
         this.runsScored += runs;
     }
 
-    public void addBallFaced() {
+    public void incrementBallFaced(){
         this.ballsFaced++;
     }
 }

@@ -25,6 +25,12 @@ public class PlayerController {
     public Player createPlayer(@PathVariable Long teamId, @RequestBody Player player) {
         return playerService.createPlayer(teamId, player);
     }
+
+    @PostMapping("/{teamId}")
+    public ResponseEntity<List<Player>> addPlayersToTeam(@PathVariable Long teamId, @RequestBody List<Player> players) {
+        return new ResponseEntity<>(playerService.addPlayersToTeam(teamId, players), HttpStatus.CREATED);
+    }
+
     @GetMapping
     public List<Player> getAllPlayers() {
         return playerService.getAllPlayers();

@@ -2,10 +2,8 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.model.Player;
 import com.devesh.cricket.model.Team;
-import com.devesh.cricket.model.Tournament;
 import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
-import com.devesh.cricket.repository.TournamentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,14 +14,10 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
-    private final TournamentRepository tournamentRepository;
-    private final TournamentService tournamentService;
 
-    public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository, TournamentRepository tournamentRepository, TournamentService tournamentService) {
+    public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
         this.teamRepository = teamRepository;
         this.playerRepository = playerRepository;
-        this.tournamentRepository = tournamentRepository;
-        this.tournamentService = tournamentService;
     }
 
     public Team createTeam(Team team) {
@@ -55,17 +49,4 @@ public class TeamService {
         return teamRepository.findByTeamName(teamName);
     }
 
-    public List<Team> getTeamByTournamentId(Long tournamentId) {
-        Tournament tournament = tournamentService.getTournamentById(tournamentId);
-        return tournament.getTeams();
-    }
-
-    public void addTeamToTournament(List<Team> teams, Long tournamentId) {
-        Tournament tournament = tournamentService.getTournamentById(tournamentId);
-        List<Team> list = tournament.getTeams();
-        list.addAll(teams);
-        tournament.setTeams(teams);
-        tournament.setTotalTeams(tournament.getTotalTeams() + teams.size());
-        tournamentRepository.save(tournament);
-    }
 }

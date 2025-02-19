@@ -2,7 +2,7 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.model.Inning;
 import com.devesh.cricket.model.Over;
-import com.devesh.cricket.model.Team;
+import com.devesh.cricket.model.TeamMatchStats;
 import com.devesh.cricket.repository.InningRepository;
 import com.devesh.cricket.utils.StrikePair;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,8 @@ public class InningService {
         this.inningRepository = inningRepository;
     }
 
-    public void startInnings(Inning inning, Team battingTeam, Team bowlingTeam, int targetRun) {
+
+    public void startInnings(Inning inning, TeamMatchStats battingTeam, TeamMatchStats bowlingTeam, int targetRun) {
         inning.setBattingTeam(battingTeam);
         inning.setBowlingTeam(bowlingTeam);
         inningRepository.save(inning);

@@ -30,13 +30,13 @@ public class Player {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @ManyToOne
-    @JoinColumn(name = "match_id")
-    private Match match;
-
     // methods
     public void addRuns(int runs){
         this.runsScored += runs;
+    }
+
+    public void addBallFaced(int balls){
+        this.ballsFaced += balls;
     }
 
     public void incrementBallFaced(){

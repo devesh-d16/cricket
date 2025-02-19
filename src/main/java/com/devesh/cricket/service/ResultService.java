@@ -22,7 +22,7 @@ public class ResultService {
             int wicketsMargin = 10 - secondInnings.getTotalWickets();
             resultDTO.setWinningTeam(secondInnings.getBattingTeam());
             resultDTO.setWinningMargin(wicketsMargin);
-            resultDTO.setWinningCondition(secondInnings.getBattingTeam().getTeamName() + " won the game by " + String.valueOf(wicketsMargin) + " wickets.");
+            resultDTO.setWinningCondition(secondInnings.getBattingTeam().getTeamName()+ " won the game by " + String.valueOf(wicketsMargin) + " wickets.");
         }
         else{
             resultDTO.setWinningTeam(null);

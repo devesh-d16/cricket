@@ -6,6 +6,7 @@ import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -76,5 +77,21 @@ public class PlayerService {
             return team.getPlayers();
         }
         return null;
+    }
+
+    public List<Player> addPlayersToTeam(Long teamId, List<Player> players) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Team not found"));
+
+        for (Player player : players) {
+            player.setTeam(team);
+        }
+
+        List<Player> savedPlayers = playerRepository.saveAll(players);
+
+        team.getPlayers().addAll(savedPlayers);
+        teamRepository.save(team);
+
+        return savedPlayers;
     }
 }

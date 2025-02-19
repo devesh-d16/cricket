@@ -25,18 +25,13 @@ public class Match {
     private String winningCondition;
 
 
-    // understand
-    @ManyToOne
-    @JoinColumn(name = "tournament_id")
-    private Tournament tournament;
-
     @ManyToOne
     @JoinColumn(name = "team1_id")
-    private Team team1;
+    private TeamMatchStats team1;
 
     @ManyToOne
     @JoinColumn(name = "team2_id")
-    private Team team2;
+    private TeamMatchStats team2;
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -44,6 +39,5 @@ public class Match {
 
     @ManyToOne
     @JoinColumn(name = "winning_team_id")
-    private Team winningTeam;
-
+    private TeamMatchStats winningTeam;
 }

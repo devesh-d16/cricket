@@ -27,12 +27,6 @@ public class TeamController {
         return new ResponseEntity<>(teamService.createTeam(team), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{tournamentId}")
-    public ResponseEntity<HttpStatus> addTeamToTournament(@RequestBody List<Team> teams, @PathVariable Long tournamentId){
-        teamService.addTeamToTournament(teams, tournamentId);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
     @GetMapping
     public ResponseEntity<List<Team>> getAllTeams() {
         return new ResponseEntity<>(teamService.getAllTeam(), HttpStatus.OK);
@@ -44,12 +38,7 @@ public class TeamController {
     }
 
     @GetMapping("/name/{teamName}")
-    public ResponseEntity<Team> getTeamByName(@PathVariable String teamName){
+    public ResponseEntity<Team> getTeamByName(@PathVariable String teamName) {
         return new ResponseEntity<>(teamService.getTeamByName(teamName), HttpStatus.OK);
-    }
-
-    @GetMapping("/{tournamentId}")
-    public ResponseEntity<List<Team>> getTeamByTournamentId(@PathVariable Long tournamentId){
-        return new ResponseEntity<>(teamService.getTeamByTournamentId(tournamentId), HttpStatus.OK);
     }
 }

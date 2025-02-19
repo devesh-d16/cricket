@@ -9,12 +9,14 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
-//@Entity
+@Entity
 public class TeamMatchStats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String teamName;
 
     private int totalRuns = 0;
     private int totalWickets = 0;
@@ -23,12 +25,13 @@ public class TeamMatchStats {
 
     @ManyToOne
     @JoinColumn(name = "team_id")
+    @JsonIgnore
     private Team team;
 
     @ManyToOne
     @JoinColumn(name = "match_id")
+    @JsonIgnore
     private Match match;
-
 
     @OneToMany(mappedBy = "teamMatchStats")
     @JsonIgnore

@@ -8,7 +8,6 @@ import lombok.*;
 import java.util.List;
 
 
-
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -30,11 +29,11 @@ public class Inning {
 
     @ManyToOne
     @JoinColumn(name = "batting_team_id")
-    private Team battingTeam;
+    private TeamMatchStats battingTeam;
 
     @ManyToOne
     @JoinColumn(name = "bowling_team_id")
-    private Team bowlingTeam;
+    private TeamMatchStats bowlingTeam;
 
     @OneToMany(mappedBy = "inning", cascade = CascadeType.ALL)
     @JsonIgnore

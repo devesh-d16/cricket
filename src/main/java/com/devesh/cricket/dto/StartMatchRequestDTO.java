@@ -6,4 +6,5 @@ import lombok.Data;
 public class StartMatchRequestDTO {
     Long team1Id;
     Long team2Id;
+    int overs;
 }
