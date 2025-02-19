@@ -2,8 +2,9 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.model.Ball;
 import com.devesh.cricket.model.Inning;
+import com.devesh.cricket.model.PlayerMatchStats;
 import com.devesh.cricket.model.TeamMatchStats;
-import com.devesh.cricket.model.enums.PlayerRole;
+import com.devesh.cricket.enums.PlayerRole;
 import com.devesh.cricket.repository.BallRepository;
 import com.devesh.cricket.utils.StrikePair;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,14 @@ public class BallService {
     }
 
     public void simulateBall(Inning inning, Ball ball, TeamMatchStats batting, StrikePair strikePair, int targetRun){
+        PlayerMatchStats playerBatting = strikePair.playerOnStrike;
+        playerBatting.incrementBallFaced();
+        ball.setBatsman(playerBatting);
+
         int run = simulateRun(strikePair);
-        ball.setBatsman(strikePair.playerOnStrike.getPlayer());
+
         handleRunOrWicket(inning, ball, run, batting, strikePair, targetRun);
+
         gameLogicService.rotateStrike(run, strikePair);
         ballRepository.save(ball);
     }
@@ -41,20 +47,25 @@ public class BallService {
     }
 
     public void handleWicket(Inning inning, Ball ball, TeamMatchStats batting, StrikePair strikePair, int targetRun) {
+
         inning.incrementWickets();
-        batting.addWicket();
+        batting.incrementWickets();
+
         ball.setRunsScored(0);
         ball.setWicket(true);
-        strikePair.playerOnStrike.incrementBallFaced();
-        if (!gameLogicService.gameEnd(batting, inning, targetRun) && strikePair.getNextBatsman() < 10) {
-                strikePair.playerOnStrike = (batting.getPlayers().get(strikePair.getNextBatsman()));
+
+        if (!gameLogicService.gameEnd(batting, inning, targetRun) && strikePair.getNextBat() <= 10) {
+                strikePair.playerOnStrike = (batting.getPlayers().get(strikePair.getNextBat()));
+                strikePair.nextBatsman();
         }
     }
 
     public void handleRun(Inning inning, Ball ball, int run, TeamMatchStats batting, StrikePair strikePair) {
-        batting.addRuns(run);
-        strikePair.playerOnStrike.addRuns(run);
-        strikePair.playerOnStrike.incrementBallFaced();
         ball.setRunsScored(run);
+
+        batting.addRuns(run);
+        inning.addRuns(run);
+
+        strikePair.playerOnStrike.addRuns(run);
     }
 }

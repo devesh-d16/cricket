@@ -1,4 +1,4 @@
-package com.devesh.cricket.model.enums;
+package com.devesh.cricket.enums;
 
 public enum Format {
     T5,

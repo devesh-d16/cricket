@@ -2,7 +2,6 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.config.GameConfig;
 import com.devesh.cricket.model.*;
-import com.devesh.cricket.ui.UI;
 import com.devesh.cricket.utils.GameUtils;
 import com.devesh.cricket.utils.StrikePair;
 import org.springframework.stereotype.Service;
@@ -15,12 +14,12 @@ public class GameLogicService {
 
     private final GameUtils utils;
 
-    public GameLogicService(UI ui, GameUtils utils) {
-        this.utils = utils;
+    public GameLogicService(GameUtils utils, GameUtils utils1) {
+        this.utils = utils1;
     }
 
     public boolean gameEnd(TeamMatchStats batting, Inning inning, int targetRun) {
-        return (inning.getTotalWickets() > 9 || (targetRun != -1 && batting.getTotalRuns() > targetRun));
+        return (inning.getTotalWickets() >= 10 || (targetRun != -1 && batting.getTotalRuns() > targetRun));
     }
 
     public void swapStrikers(StrikePair strikePair) {

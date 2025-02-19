@@ -17,25 +17,9 @@ public class Team {
     private Long teamId;
 
     private String teamName;
-    private int totalRuns = 0;
-//    private int totalWickets = 0;
-
 
     @OneToMany(mappedBy = "team")
     @JsonIgnore
     private List<Player> players;
 
-    public void addRuns(int runs) {
-        this.totalRuns += runs;
-    }
-
-//    public void incrementWickets() {
-//        if (this.totalWickets < 10) {
-//            this.totalWickets++;
-//        }
-//    }
-
-    public void resetTeam(){
-        this.totalRuns = 0;
-    }
 }

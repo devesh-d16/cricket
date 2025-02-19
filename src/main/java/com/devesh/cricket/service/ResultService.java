@@ -9,6 +9,7 @@ public class ResultService {
 
     public ResultDTO evaluateResult(Inning firstInnings, Inning secondInnings) {
         ResultDTO resultDTO = new ResultDTO();
+
         int runsScoredByTeam1 = firstInnings.getTotalRuns();
         int runsScoredByTeam2 = secondInnings.getTotalRuns();
 

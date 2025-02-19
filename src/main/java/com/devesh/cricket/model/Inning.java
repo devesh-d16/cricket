@@ -16,13 +16,12 @@ public class Inning {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long inningsId;
 
     private int totalRuns = 0;
     private int totalWickets = 0;
     private int totalOvers = 0;
 
-    // understand
     @ManyToOne
     @JoinColumn(name = "match_id")
     private Match match;
@@ -40,19 +39,12 @@ public class Inning {
     private List<Over> overs;
 
 
-    // methods
     public void addRuns(int runs){
         this.totalRuns += runs;
     }
 
-    public void addWickets(int wickets){
-        this.totalWickets += wickets;
-    }
-
-    public void incrementWickets() {
-        if (this.totalWickets < 10) {
-            this.totalWickets++;
-        }
+    public void incrementWickets(){
+        this.totalWickets++;
     }
 
     public void addOvers(){

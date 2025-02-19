@@ -1,6 +1,6 @@
 package com.devesh.cricket.model;
 
-import com.devesh.cricket.model.enums.Status;
+import com.devesh.cricket.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,7 +23,6 @@ public class Match {
     private boolean isCompleted = false;
     private int winningMargin;
     private String winningCondition;
-
 
     @ManyToOne
     @JoinColumn(name = "team1_id")

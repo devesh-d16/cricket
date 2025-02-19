@@ -2,6 +2,7 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.config.GameConfig;
 import com.devesh.cricket.model.*;
+import com.devesh.cricket.repository.BallRepository;
 import com.devesh.cricket.repository.OverRepository;
 import com.devesh.cricket.utils.StrikePair;
 import org.springframework.stereotype.Service;
@@ -15,33 +16,34 @@ public class OverService {
     private final BallService ballService;
     private final GameLogicService gameLogicService;
     private final OverRepository overRepository;
+    private final BallRepository ballRepository;
 
-    public OverService(BallService ballService, GameLogicService gameLogicService, OverRepository overRepository) {
+    public OverService(BallService ballService, GameLogicService gameLogicService, OverRepository overRepository, BallRepository ballRepository) {
         this.ballService = ballService;
         this.gameLogicService = gameLogicService;
         this.overRepository = overRepository;
+        this.ballRepository = ballRepository;
     }
 
     public void simulateOver(Inning inning, Over over, TeamMatchStats batting, int targetRun, StrikePair strikePair) {
         List<Ball> balls = new ArrayList<>();
-        if (over.getId() == null) {
-            overRepository.save(over);
-        }
 
-        for (int ballNo = 1; ballNo <= GameConfig.BALLS_PER_OVER && (!gameLogicService.gameEnd(batting, inning, targetRun)); ballNo++) {
+        for (int ball = 1; ball <= GameConfig.BALLS_PER_OVER && (!gameLogicService.gameEnd(batting, inning, targetRun)); ball++) {
+
             Ball newBall = new Ball();
-            newBall.setOverNumber(over.getOverNumber());
             newBall.setOver(over);
-            newBall.setBallNumber(ballNo);
+            newBall.setBallNumber(ball);
+            ballRepository.save(newBall);
 
             ballService.simulateBall(inning, newBall, batting, strikePair, targetRun);
+
             if (newBall.isWicket()) {
                 over.addWicket();
             }
+
             over.addRuns(newBall.getRunsScored());
             balls.add(newBall);
         }
-
         gameLogicService.swapStrikers(strikePair);
         over.setBalls(balls);
         overRepository.save(over);

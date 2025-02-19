@@ -4,6 +4,7 @@ import com.devesh.cricket.model.Inning;
 import com.devesh.cricket.model.Over;
 import com.devesh.cricket.model.TeamMatchStats;
 import com.devesh.cricket.repository.InningRepository;
+import com.devesh.cricket.repository.OverRepository;
 import com.devesh.cricket.utils.StrikePair;
 import org.springframework.stereotype.Service;
 
@@ -16,33 +17,31 @@ public class InningService {
     private final OverService overService;
     private final GameLogicService gameLogicService;
     private final InningRepository inningRepository;
+    private final OverRepository overRepository;
 
-    public InningService(OverService overService, GameLogicService gameLogicService, InningRepository inningRepository) {
+    public InningService(OverService overService, GameLogicService gameLogicService, InningRepository inningRepository, OverRepository overRepository) {
         this.overService = overService;
         this.gameLogicService = gameLogicService;
         this.inningRepository = inningRepository;
+        this.overRepository = overRepository;
     }
 
 
     public void startInnings(Inning inning, TeamMatchStats battingTeam, TeamMatchStats bowlingTeam, int targetRun) {
-        inning.setBattingTeam(battingTeam);
-        inning.setBowlingTeam(bowlingTeam);
-        inningRepository.save(inning);
 
-        int overs = inning.getMatch().getOvers();
+        int totalOvers = inning.getMatch().getOvers();
         StrikePair strikePair = new StrikePair(battingTeam.getPlayers().get(0), battingTeam.getPlayers().get(1));
 
         List<Over> overList = new ArrayList<>();
-        for (int overNo = 1; overNo <= overs && (!gameLogicService.gameEnd(battingTeam, inning, targetRun)); overNo++) {
-            Over over = new Over();
-            over.setInning(inning);
-            over.setOverNumber(overNo);
+        for (int over = 1; over <= totalOvers && (!gameLogicService.gameEnd(battingTeam, inning, targetRun)); over++) {
+            Over newOver = new Over();
+            newOver.setOverNumber(over);
+            newOver.setInning(inning);
+            overRepository.save(newOver);
 
-            overService.simulateOver(inning, over, battingTeam, targetRun, strikePair);
-            overList.add(over);
+            overService.simulateOver(inning, newOver, battingTeam, targetRun, strikePair);
 
-            inning.addRuns(over.getRunsScored());
-            inning.addWickets(over.getWicketsInTheOver());
+            overList.add(newOver);
             inning.addOvers();
         }
 

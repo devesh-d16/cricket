@@ -3,7 +3,8 @@ package com.devesh.cricket.service;
 import com.devesh.cricket.dto.ResultDTO;
 import com.devesh.cricket.dto.StartMatchRequestDTO;
 import com.devesh.cricket.model.*;
-import com.devesh.cricket.model.enums.Status;
+import com.devesh.cricket.enums.Status;
+import com.devesh.cricket.repository.InningRepository;
 import com.devesh.cricket.repository.MatchRepository;
 
 import com.devesh.cricket.repository.PlayerMatchStatsRepository;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MatchService {
@@ -21,14 +21,23 @@ public class MatchService {
     private final InningService inningService;
     private final ResultService resultService;
     private final MatchRepository matchRepository;
+    private final InningRepository inningRepository;
     private final TeamMatchStatsRepository teamMatchStatsRepository;
     private final PlayerMatchStatsRepository playerMatchStatsRepository;
 
-    public MatchService(TeamService teamService, InningService inningService, ResultService resultService, MatchRepository matchRepository, TeamMatchStatsRepository teamMatchStatsRepository, PlayerMatchStatsRepository playerMatchStatsRepository) {
+    public MatchService(TeamService teamService,
+                        InningService inningService,
+                        ResultService resultService,
+                        MatchRepository matchRepository,
+                        InningRepository inningRepository,
+                        TeamMatchStatsRepository teamMatchStatsRepository,
+                        PlayerMatchStatsRepository playerMatchStatsRepository
+    ) {
         this.teamService = teamService;
         this.inningService = inningService;
         this.resultService = resultService;
         this.matchRepository = matchRepository;
+        this.inningRepository = inningRepository;
         this.teamMatchStatsRepository = teamMatchStatsRepository;
         this.playerMatchStatsRepository = playerMatchStatsRepository;
     }
@@ -36,6 +45,7 @@ public class MatchService {
     public Match startMatch(StartMatchRequestDTO startMatchRequestDTO) {
         TeamMatchStats team1 = initializeTeamMatchStats(startMatchRequestDTO.getTeam1Id());
         TeamMatchStats team2 = initializeTeamMatchStats(startMatchRequestDTO.getTeam2Id());
+
         int overs = startMatchRequestDTO.getOvers();
 
         Match match = createMatch(team1, team2, overs);
@@ -56,40 +66,35 @@ public class MatchService {
         return matchRepository.save(match);
     }
 
-    public Inning simulateInning(Match match, TeamMatchStats battingTeam, TeamMatchStats bowlingTeam, int targetRuns) {
-        Inning inning = new Inning();
-        inning.setMatch(match);
-        inningService.startInnings(inning, battingTeam, bowlingTeam, targetRuns);
-
-        battingTeam.setTotalOvers(inning.getTotalOvers());
-        battingTeam.setTotalWickets(inning.getTotalWickets());
-        return inning;
-    }
-
 
     public TeamMatchStats initializeTeamMatchStats(Long teamId) {
-        Team team = teamService.getTeamById(teamId);
-        TeamMatchStats teamMatchStats = new TeamMatchStats();
-        teamMatchStats.setTeam(team);
-        teamMatchStats.setTeamName(team.getTeamName());
+        TeamMatchStats teamMatchStats = new TeamMatchStats(); // will store the stats for the match
+        Team team = teamService.getTeamById(teamId); // real team class retrieval
 
-        List<PlayerMatchStats> playerMatchStats = team.getPlayers().stream().map(player -> {
-            PlayerMatchStats playerMatch = new PlayerMatchStats();
-            playerMatch.setPlayer(player);
-            playerMatch.setPlayerName(player.getPlayerName());
-            playerMatch.setPlayerRole(player.getPlayerRole());
-            return playerMatch;
-        }).toList();
+        teamMatchStats.setTeam(team); // set stats belong to which team
+        teamMatchStats.setTeamName(team.getTeamName()); // store team name
 
-        teamMatchStats.setPlayers(playerMatchStats);
-        teamMatchStats.reset();
+        List<PlayerMatchStats> players = team.getPlayers().stream()
+                .map(player ->
+                {
+                    PlayerMatchStats playerMatch = new PlayerMatchStats();
+                    playerMatch.setPlayer(player);
+                    playerMatch.setPlayerName(player.getPlayerName());
+                    playerMatch.setPlayerRole(player.getPlayerRole());
+                    playerMatchStatsRepository.save(playerMatch);
+                    return playerMatch;
+                }
+        ).toList();
+        teamMatchStats.setPlayers(players);
 
+        teamMatchStats.reset(); // to reset the stat for each new match
+        teamMatchStatsRepository.save(teamMatchStats);
+        teamMatchStats.getPlayers().forEach(player -> player.setTeamMatchStats(teamMatchStats));
         return teamMatchStats;
     }
 
+
     public Match createMatch(TeamMatchStats team1, TeamMatchStats team2, int overs) {
-        team1 = teamMatchStatsRepository.save(team1);
-        team2 = teamMatchStatsRepository.save(team2);
 
         Match match = new Match();
         match.setTeam1(team1);
@@ -100,11 +105,25 @@ public class MatchService {
         team1.setMatch(match);
         team2.setMatch(match);
 
-        match = matchRepository.save(match);
-
+        matchRepository.save(match);
         return match;
     }
 
+
+    public Inning simulateInning(Match match, TeamMatchStats battingTeam, TeamMatchStats bowlingTeam, int targetRuns) {
+
+        Inning inning = new Inning();
+        inning.setMatch(match);
+        inning.setBattingTeam(battingTeam);
+        inning.setBowlingTeam(bowlingTeam);
+        inningRepository.save(inning);
+
+        inningService.startInnings(inning, battingTeam, bowlingTeam, targetRuns);
+
+        battingTeam.setTotalOvers(inning.getTotalOvers());
+        battingTeam.setTotalWickets(inning.getTotalWickets());
+        return inning;
+    }
 
     public void matchResult(Match match, Inning firstInnings, Inning secondInnings) {
         match.setCompleted(true);
@@ -123,12 +142,7 @@ public class MatchService {
 
 
     public void updateTeamStats(TeamMatchStats teamMatchStats) {
-        teamMatchStats.addRuns(teamMatchStats.getTotalRuns());
-        for(PlayerMatchStats player : teamMatchStats.getPlayers()) {
-            playerMatchStatsRepository.save(player);
-            player.getPlayer().addRuns(player.getRunsScored());
-            player.getPlayer().addBallFaced(player.getBallsFaced());
-        }
+        playerMatchStatsRepository.saveAll(teamMatchStats.getPlayers());
     }
 }
 

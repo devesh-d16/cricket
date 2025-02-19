@@ -11,24 +11,21 @@ public class Ball {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ballId;
 
     private int ballNumber;
-    private int overNumber;
     private int runsScored;
     private boolean isWicket;
 
-    // understand
     @ManyToOne
     @JoinColumn(name = "over_id")
     private Over over;
 
     @ManyToOne
-    @JoinColumn(name = "batsman_id")
-    private Player batsman;
+    @JoinColumn(name = "batsman_stats_id")
+    private PlayerMatchStats batsman;
 
     @ManyToOne
-    @JoinColumn(name = "bowler_id")
-    private Player bowler;
-
+    @JoinColumn(name = "bowler_stats_id")
+    private PlayerMatchStats bowler;
 }

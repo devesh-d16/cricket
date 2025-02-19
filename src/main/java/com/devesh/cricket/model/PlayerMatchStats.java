@@ -1,6 +1,6 @@
 package com.devesh.cricket.model;
 
-import com.devesh.cricket.model.enums.PlayerRole;
+import com.devesh.cricket.enums.PlayerRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,10 +13,9 @@ public class PlayerMatchStats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long playerMatchStatsId;
 
     private String playerName;
-
     private int runsScored = 0;
     private int ballsFaced = 0;
     private int wicketsTaken = 0;
@@ -30,12 +29,8 @@ public class PlayerMatchStats {
     @JoinColumn(name = "player_id")
     private Player player;
 
-//    @ManyToOne
-//    @JoinColumn(name = "match_id")
-//    private Match match;
-
     @ManyToOne
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_stats_id")
     private TeamMatchStats teamMatchStats;
 
     public void addRuns(int runs) {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,10 +15,9 @@ public class TeamMatchStats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long teamMatchStatsId;
 
     private String teamName;
-
     private int totalRuns = 0;
     private int totalWickets = 0;
     private int totalOvers = 0;
@@ -41,7 +41,7 @@ public class TeamMatchStats {
         this.totalRuns += runs;
     }
 
-    public void addWicket() {
+    public void incrementWickets() {
         this.totalWickets++;
     }
 
