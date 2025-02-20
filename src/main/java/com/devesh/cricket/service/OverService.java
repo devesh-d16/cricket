@@ -25,7 +25,7 @@ public class OverService {
         this.ballRepository = ballRepository;
     }
 
-    public void simulateOver(Inning inning, Over over, TeamMatchStats batting, int targetRun, StrikePair strikePair) {
+    public void simulateOver(Inning inning, Over over, TeamMatchStats batting, int targetRun, StrikePair strikePair, PlayerMatchStats bowler) {
         List<Ball> balls = new ArrayList<>();
 
         for (int ball = 1; ball <= GameConfig.BALLS_PER_OVER && (!gameLogicService.gameEnd(batting, inning, targetRun)); ball++) {
@@ -33,12 +33,14 @@ public class OverService {
             Ball newBall = new Ball();
             newBall.setOver(over);
             newBall.setBallNumber(ball);
+            newBall.setBowler(bowler);
             ballRepository.save(newBall);
 
-            ballService.simulateBall(inning, newBall, batting, strikePair, targetRun);
+            ballService.simulateBall(inning, newBall, batting, strikePair, targetRun, bowler);
 
             if (newBall.isWicket()) {
                 over.addWicket();
+                bowler.incrementWicketTaken();
             }
 
             over.addRuns(newBall.getRunsScored());

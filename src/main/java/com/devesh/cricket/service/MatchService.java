@@ -2,6 +2,7 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.dto.ResultDTO;
 import com.devesh.cricket.dto.StartMatchRequestDTO;
+import com.devesh.cricket.enums.PlayerRole;
 import com.devesh.cricket.model.*;
 import com.devesh.cricket.enums.Status;
 import com.devesh.cricket.repository.InningRepository;
@@ -50,13 +51,24 @@ public class MatchService {
 
         int overs = startMatchRequestDTO.getOvers();
 
+        List<PlayerMatchStats> bowlersTeam1 = team1.getPlayers().stream().filter(
+                playerMatchStats -> (playerMatchStats.getPlayerRole() == PlayerRole.BOWLER)
+        ).toList();
+        System.out.println("bowlersTeam1: " + bowlersTeam1);
+
+        System.out.println(team2.getPlayers());
+        List<PlayerMatchStats> bowlersTeam2 = team2.getPlayers().stream().filter(
+                playerMatchStats -> (playerMatchStats.getPlayerRole() == PlayerRole.BOWLER)
+        ).toList();
+        System.out.println("bowlersTeam2: " + bowlersTeam2);
+
         Match match = createMatch(team1, team2, overs);
 
         List<Inning> inningList = new ArrayList<>();
 
-        Inning firstInnings = simulateInning(match, team1, team2, -1);
+        Inning firstInnings = simulateInning(match, team1, team2, bowlersTeam2, -1);
         inningList.add(firstInnings);
-        Inning secondInnings = simulateInning(match, team2, team1, firstInnings.getTotalRuns());
+        Inning secondInnings = simulateInning(match, team2, team1, bowlersTeam1, firstInnings.getTotalRuns());
         inningList.add(secondInnings);
 
         match.setInnings(inningList);
@@ -112,15 +124,17 @@ public class MatchService {
     }
 
 
-    public Inning simulateInning(Match match, TeamMatchStats battingTeam, TeamMatchStats bowlingTeam, int targetRuns) {
+    public Inning simulateInning(Match match, TeamMatchStats battingTeam, TeamMatchStats bowlingTeam, List<PlayerMatchStats> bowlers, int targetRuns) {
 
         Inning inning = new Inning();
         inning.setMatch(match);
         inning.setBattingTeam(battingTeam);
         inning.setBowlingTeam(bowlingTeam);
+        inning.setBowlers(bowlers);
+
         inningRepository.save(inning);
 
-        inningService.startInnings(inning, battingTeam, bowlingTeam, targetRuns);
+        inningService.startInnings(inning, battingTeam, bowlingTeam, inning.getBowlers(), targetRuns);
 
         battingTeam.setTotalOvers(inning.getTotalOvers());
         battingTeam.setTotalWickets(inning.getTotalWickets());
@@ -157,6 +171,11 @@ public class MatchService {
 
     public List<Match> getAllMatchesByTeamId(Long teamId) {
         return teamMatchStatService.getAllMatchesByTeamId(teamId);
+    }
+
+    public Team getWinnerByMatchId(Long matchId) {
+        Match match = matchRepository.getMatchByMatchId(matchId);
+        return match.getWinningTeam().getTeam();
     }
 }
 

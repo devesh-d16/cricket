@@ -3,6 +3,8 @@ package com.devesh.cricket.controller;
 
 import com.devesh.cricket.dto.StartMatchRequestDTO;
 import com.devesh.cricket.model.Match;
+import com.devesh.cricket.model.Team;
+import com.devesh.cricket.model.TeamMatchStats;
 import com.devesh.cricket.service.MatchService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,7 @@ public class MatchController {
         this.matchService = matchService;
     }
 
-    @PostMapping("/start")
+    @PostMapping
     public ResponseEntity<Match> startMatch(@RequestBody StartMatchRequestDTO startMatchRequestDTO){
         Match match = matchService.startMatch(startMatchRequestDTO);
         return new ResponseEntity<>(match, HttpStatus.CREATED);
@@ -37,8 +39,8 @@ public class MatchController {
         return new ResponseEntity<>(matchService.getMatchById(matchId), HttpStatus.OK);
     }
 
-    @GetMapping("/teams/{teamId}")
-    public ResponseEntity<List<Match>> getMatchesByTeamId(@PathVariable Long teamId){
-        return new ResponseEntity<>(matchService.getAllMatchesByTeamId(teamId), HttpStatus.OK);
+    @GetMapping("/{matchId}/winner")
+    public ResponseEntity<Team> getWinnerByMatchId(@PathVariable Long matchId){
+        return new ResponseEntity<>(matchService.getWinnerByMatchId(matchId), HttpStatus.OK);
     }
 }

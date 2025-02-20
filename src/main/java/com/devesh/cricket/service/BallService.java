@@ -19,14 +19,15 @@ public class BallService {
         this.gameLogicService = gameLogicService;
     }
 
-    public void simulateBall(Inning inning, Ball ball, TeamMatchStats batting, StrikePair strikePair, int targetRun){
+    public void simulateBall(Inning inning, Ball ball, TeamMatchStats batting, StrikePair strikePair, int targetRun, PlayerMatchStats bowler){
         PlayerMatchStats playerBatting = strikePair.playerOnStrike;
         playerBatting.incrementBallFaced();
+        bowler.incrementBallsBowled();
         ball.setBatsman(playerBatting);
 
         int run = simulateRun(strikePair);
 
-        handleRunOrWicket(inning, ball, run, batting, strikePair, targetRun);
+        handleRunOrWicket(inning, ball, run, batting, strikePair, targetRun, bowler);
 
         gameLogicService.rotateStrike(run, strikePair);
         ballRepository.save(ball);
@@ -38,11 +39,11 @@ public class BallService {
                 : gameLogicService.getRandomBowlerWeightScore();
     }
 
-    public void handleRunOrWicket(Inning inning, Ball ball, int run, TeamMatchStats batting, StrikePair strikePair, int targetRun) {
+    public void handleRunOrWicket(Inning inning, Ball ball, int run, TeamMatchStats batting, StrikePair strikePair, int targetRun, PlayerMatchStats bowler) {
         if (run == -1) {
             handleWicket(inning, ball, batting, strikePair, targetRun);
         } else {
-            handleRun(inning, ball, run, batting, strikePair);
+            handleRun(inning, ball, run, batting, strikePair, bowler);
         }
     }
 
@@ -60,11 +61,12 @@ public class BallService {
         }
     }
 
-    public void handleRun(Inning inning, Ball ball, int run, TeamMatchStats batting, StrikePair strikePair) {
+    public void handleRun(Inning inning, Ball ball, int run, TeamMatchStats batting, StrikePair strikePair, PlayerMatchStats bowler) {
         ball.setRunsScored(run);
 
         batting.addRuns(run);
         inning.addRuns(run);
+        bowler.addRunsConceded(run);
 
         strikePair.playerOnStrike.addRuns(run);
     }

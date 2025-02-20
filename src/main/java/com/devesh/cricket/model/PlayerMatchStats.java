@@ -1,8 +1,11 @@
 package com.devesh.cricket.model;
 
 import com.devesh.cricket.enums.PlayerRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 
 @Getter
@@ -51,5 +54,17 @@ public class PlayerMatchStats {
 
     public void incrementBallFaced(){
         this.ballsFaced++;
+    }
+
+    public void incrementWicketTaken() {
+        this.wicketsTaken++;
+    }
+
+    public void incrementBallsBowled() {
+        this.ballsBowled++;
+    }
+
+    public void addRunsConceded(int run) {
+        this.runsConceded += run;
     }
 }

@@ -1,6 +1,7 @@
 package com.devesh.cricket.model;
 
 
+import com.devesh.cricket.enums.PlayerRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,6 +45,10 @@ public class Inning {
     @OneToMany(mappedBy = "inning", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Over> overs;
+
+    // List to store bowlers
+    @Transient  // Not stored in the database
+    private List<PlayerMatchStats> bowlers;
 
 
     public void addRuns(int runs){
