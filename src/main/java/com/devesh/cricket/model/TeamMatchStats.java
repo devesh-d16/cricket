@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,9 +17,17 @@ public class TeamMatchStats {
     private Long teamMatchStatsId;
 
     private String teamName;
+
+    @Column(columnDefinition = "int default 0")
     private int totalRuns = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int totalWickets = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int totalOvers = 0;
+
+    @Column(columnDefinition = "BIT")
     private boolean isWinner;
 
     @ManyToOne

@@ -49,4 +49,15 @@ public class InningService {
         inningRepository.save(inning);
     }
 
+    public List<Inning> getAllInnings() {
+        return inningRepository.findAll();
+    }
+
+    public Inning getInningById(Long inningId) {
+        return inningRepository.findById(inningId).orElse(null);
+    }
+
+    public List<Inning> getInningsByMatch(Long matchId) {
+        return inningRepository.getAllByMatch_MatchId(matchId);
+    }
 }

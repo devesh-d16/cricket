@@ -20,6 +20,7 @@ public class MatchService {
     private final TeamService teamService;
     private final InningService inningService;
     private final ResultService resultService;
+    private final TeamMatchStatService teamMatchStatService;
     private final MatchRepository matchRepository;
     private final InningRepository inningRepository;
     private final TeamMatchStatsRepository teamMatchStatsRepository;
@@ -27,7 +28,7 @@ public class MatchService {
 
     public MatchService(TeamService teamService,
                         InningService inningService,
-                        ResultService resultService,
+                        ResultService resultService, TeamMatchStatService teamMatchStatService,
                         MatchRepository matchRepository,
                         InningRepository inningRepository,
                         TeamMatchStatsRepository teamMatchStatsRepository,
@@ -36,6 +37,7 @@ public class MatchService {
         this.teamService = teamService;
         this.inningService = inningService;
         this.resultService = resultService;
+        this.teamMatchStatService = teamMatchStatService;
         this.matchRepository = matchRepository;
         this.inningRepository = inningRepository;
         this.teamMatchStatsRepository = teamMatchStatsRepository;
@@ -143,6 +145,18 @@ public class MatchService {
 
     public void updateTeamStats(TeamMatchStats teamMatchStats) {
         playerMatchStatsRepository.saveAll(teamMatchStats.getPlayers());
+    }
+
+    public List<Match> getAllMatches() {
+        return matchRepository.findAll();
+    }
+
+    public Match getMatchById(Long matchId) {
+        return matchRepository.getMatchByMatchId(matchId);
+    }
+
+    public List<Match> getAllMatchesByTeamId(Long teamId) {
+        return teamMatchStatService.getAllMatchesByTeamId(teamId);
     }
 }
 

@@ -15,7 +15,9 @@ public class Player {
     private Long playerId;
 
     private String playerName;
+
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private PlayerRole playerRole;
 
     @ManyToOne

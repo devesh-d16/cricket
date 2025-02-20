@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/apis/matches")
@@ -20,8 +22,23 @@ public class MatchController {
     }
 
     @PostMapping("/start")
-    public ResponseEntity<?> startMatch(@RequestBody StartMatchRequestDTO startMatchRequestDTO){
+    public ResponseEntity<Match> startMatch(@RequestBody StartMatchRequestDTO startMatchRequestDTO){
         Match match = matchService.startMatch(startMatchRequestDTO);
         return new ResponseEntity<>(match, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Match>> getAllMatches(){
+        return new ResponseEntity<>(matchService.getAllMatches(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{matchId}")
+    public ResponseEntity<Match> getMatchById(@PathVariable Long matchId){
+        return new ResponseEntity<>(matchService.getMatchById(matchId), HttpStatus.OK);
+    }
+
+    @GetMapping("/teams/{teamId}")
+    public ResponseEntity<List<Match>> getMatchesByTeamId(@PathVariable Long teamId){
+        return new ResponseEntity<>(matchService.getAllMatchesByTeamId(teamId), HttpStatus.OK);
     }
 }

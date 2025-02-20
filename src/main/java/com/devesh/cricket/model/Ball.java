@@ -7,6 +7,7 @@ import lombok.*;
 @Setter
 @RequiredArgsConstructor
 @Entity
+@Table(name = "ball_details")
 public class Ball {
 
     @Id
@@ -15,6 +16,8 @@ public class Ball {
 
     private int ballNumber;
     private int runsScored;
+
+    @Column(columnDefinition = "BIT")
     private boolean isWicket;
 
     @ManyToOne

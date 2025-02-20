@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @RequiredArgsConstructor
 @Entity
+
 public class PlayerMatchStats {
 
     @Id
@@ -16,13 +17,24 @@ public class PlayerMatchStats {
     private Long playerMatchStatsId;
 
     private String playerName;
+
+    @Column(columnDefinition = "int default 0")
     private int runsScored = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int ballsFaced = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int wicketsTaken = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int ballsBowled = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int runsConceded = 0;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private PlayerRole playerRole;
 
     @ManyToOne

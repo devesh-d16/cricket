@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 @Entity
+@Table(name = "over_details")
 public class Over {
 
     @Id
@@ -17,7 +18,11 @@ public class Over {
     private Long overId;
 
     private int overNumber;
+
+    @Column(columnDefinition = "int default 0")
     private int runsScored = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int wicketsInTheOver = 0;
 
     @ManyToOne

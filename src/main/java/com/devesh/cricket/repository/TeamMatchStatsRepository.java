@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TeamMatchStatsRepository extends JpaRepository<TeamMatchStats, Integer> {
+    TeamMatchStats getTeamMatchStatsByTeamMatchStatsId(Long teamMatchStatsId);
+
+    TeamMatchStats getTeamMatchStatsByTeam_TeamId(Long teamTeamId);
 }

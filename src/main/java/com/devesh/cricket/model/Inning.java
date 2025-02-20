@@ -12,18 +12,25 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 @Entity
+@Table(name = "inning_details")
 public class Inning {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inningsId;
 
+    @Column(columnDefinition = "int default 0")
     private int totalRuns = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int totalWickets = 0;
+
+    @Column(columnDefinition = "int default 0")
     private int totalOvers = 0;
 
     @ManyToOne
     @JoinColumn(name = "match_id")
+    @JsonIgnore
     private Match match;
 
     @ManyToOne

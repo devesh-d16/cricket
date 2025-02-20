@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 @Entity
+@Table(name = "match_details")
 public class Match {
 
     @Id
@@ -20,9 +21,12 @@ public class Match {
 
     private Status matchStatus;
     private int overs;
-    private boolean isCompleted = false;
     private int winningMargin;
     private String winningCondition;
+
+    @Column(columnDefinition = "BIT")
+    private boolean isCompleted = false;
+
 
     @ManyToOne
     @JoinColumn(name = "team1_id")

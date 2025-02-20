@@ -2,21 +2,17 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.config.GameConfig;
 import com.devesh.cricket.model.*;
-import com.devesh.cricket.utils.GameUtils;
 import com.devesh.cricket.utils.StrikePair;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
+
 
 @Service
 public class GameLogicService {
 
-    private final GameUtils utils;
-
-    public GameLogicService(GameUtils utils, GameUtils utils1) {
-        this.utils = utils1;
-    }
 
     public boolean gameEnd(TeamMatchStats batting, Inning inning, int targetRun) {
         return (inning.getTotalWickets() >= 10 || (targetRun != -1 && batting.getTotalRuns() > targetRun));
@@ -34,27 +30,26 @@ public class GameLogicService {
         }
     }
 
-    public int getRandomWeightScore(int[] weights) {
-        int totalWeight = IntStream.of(weights).sum();
-
-        int randomWeight = new Random().nextInt(totalWeight);
-        int cumulativeWeight = 0;
-
+    private static final Random random = new Random();
+    private static List<Integer> generateWeightedList(int[] weights) {
+        List<Integer> weightedList = new ArrayList<>();
         for (int i = 0; i < weights.length; i++) {
-            cumulativeWeight += weights[i];
-            if (randomWeight < cumulativeWeight) {
-                return GameConfig.SCORING_OPTIONS[i];
+            for (int j = 0; j < weights[i]; j++) {
+                weightedList.add(GameConfig.SCORING_OPTIONS[i]);
             }
         }
-        throw new IllegalStateException("Weight distribution error");
+        return weightedList;
     }
 
+    private static final List<Integer> BATTER_SCORE_LIST = generateWeightedList(GameConfig.BATTER_WEIGHT);
+    private static final List<Integer> BOWLER_SCORE_LIST = generateWeightedList(GameConfig.BOWLER_WEIGHT);
+
     public int getRandomBatterWeightScore() {
-        return getRandomWeightScore(GameConfig.BATTER_WEIGHT);
+        return BATTER_SCORE_LIST.get(random.nextInt(BATTER_SCORE_LIST.size()));
     }
 
     public int getRandomBowlerWeightScore() {
-        return getRandomWeightScore(GameConfig.BOWLER_WEIGHT);
+        return BOWLER_SCORE_LIST.get(random.nextInt(BOWLER_SCORE_LIST.size()));
     }
 
     public int getTotalMatches(int totalTeams) {
