@@ -5,21 +5,21 @@ import com.devesh.cricket.model.Inning;
 import com.devesh.cricket.model.PlayerMatchStats;
 import com.devesh.cricket.model.TeamMatchStats;
 import com.devesh.cricket.enums.PlayerRole;
-import com.devesh.cricket.repository.BallRepository;
 import com.devesh.cricket.utils.StrikePair;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-public class BallService {
-    private final BallRepository ballRepository;
-    private final GameLogicService gameLogicService;
+import java.util.List;
 
-    public BallService(BallRepository ballRepository, GameLogicService gameLogicService) {
-        this.ballRepository = ballRepository;
-        this.gameLogicService = gameLogicService;
-    }
+@Service
+@RequiredArgsConstructor
+public class BallService {
+
+    private final GameRulesService gameRulesService;
+    private final ScoringService scoringService;
 
     public void simulateBall(Inning inning, Ball ball, TeamMatchStats batting, StrikePair strikePair, int targetRun, PlayerMatchStats bowler){
+
         PlayerMatchStats playerBatting = strikePair.playerOnStrike;
         playerBatting.incrementBallFaced();
         bowler.incrementBallsBowled();
@@ -29,14 +29,13 @@ public class BallService {
 
         handleRunOrWicket(inning, ball, run, batting, strikePair, targetRun, bowler);
 
-        gameLogicService.rotateStrike(run, strikePair);
-        ballRepository.save(ball);
+        gameRulesService.rotateStrike(run, strikePair);
     }
 
     public int simulateRun(StrikePair strikePair) {
         return (strikePair.playerOnStrike.getPlayerRole() == PlayerRole.BATTER)
-                ? gameLogicService.getRandomBatterWeightScore()
-                : gameLogicService.getRandomBowlerWeightScore();
+                ? scoringService.getRandomBatterWeightScore()
+                : scoringService.getRandomBowlerWeightScore();
     }
 
     public void handleRunOrWicket(Inning inning, Ball ball, int run, TeamMatchStats batting, StrikePair strikePair, int targetRun, PlayerMatchStats bowler) {
@@ -48,14 +47,13 @@ public class BallService {
     }
 
     public void handleWicket(Inning inning, Ball ball, TeamMatchStats batting, StrikePair strikePair, int targetRun) {
-
         inning.incrementWickets();
         batting.incrementWickets();
 
         ball.setRunsScored(0);
         ball.setWicket(true);
 
-        if (!gameLogicService.gameEnd(batting, inning, targetRun) && strikePair.getNextBat() <= 10) {
+        if (!gameRulesService.gameEnd(batting, inning, targetRun) && strikePair.getNextBat() <= 10) {
                 strikePair.playerOnStrike = (batting.getPlayers().get(strikePair.getNextBat()));
                 strikePair.nextBatsman();
         }
@@ -70,4 +68,5 @@ public class BallService {
 
         strikePair.playerOnStrike.addRuns(run);
     }
+
 }

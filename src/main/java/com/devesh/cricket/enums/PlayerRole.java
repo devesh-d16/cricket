@@ -1,6 +1,6 @@
 package com.devesh.cricket.enums;
 
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 public enum PlayerRole {
@@ -15,3 +15,4 @@ public enum PlayerRole {
         };
     }
 }
+

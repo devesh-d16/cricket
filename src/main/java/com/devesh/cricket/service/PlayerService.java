@@ -4,20 +4,17 @@ import com.devesh.cricket.model.Player;
 import com.devesh.cricket.model.Team;
 import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PlayerService {
     private final PlayerRepository playerRepository;
     private final TeamRepository teamRepository;
 
-    public PlayerService(PlayerRepository playerRepository, TeamRepository teamRepository) {
-        this.playerRepository = playerRepository;
-        this.teamRepository = teamRepository;
-    }
 
     public Player createPlayer(Long teamId, Player player) {
 
@@ -82,13 +79,10 @@ public class PlayerService {
     public List<Player> addPlayersToTeam(Long teamId, List<Player> players) {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new RuntimeException("Team not found"));
-
         for (Player player : players) {
             player.setTeam(team);
         }
-
         List<Player> savedPlayers = playerRepository.saveAll(players);
-
         team.getPlayers().addAll(savedPlayers);
         teamRepository.save(team);
 

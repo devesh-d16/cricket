@@ -20,7 +20,7 @@ public class Player {
     @Column(length = 20)
     private PlayerRole playerRole;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     private Team team;
 }

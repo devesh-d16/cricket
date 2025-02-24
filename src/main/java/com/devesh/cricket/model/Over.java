@@ -25,11 +25,11 @@ public class Over {
     @Column(columnDefinition = "int default 0")
     private int wicketsInTheOver = 0;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "inning_id")
     private Inning inning;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bowler_stats_id")
     private PlayerMatchStats bowler;
 

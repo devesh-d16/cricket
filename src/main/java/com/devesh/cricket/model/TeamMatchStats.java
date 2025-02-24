@@ -30,19 +30,23 @@ public class TeamMatchStats {
     @Column(columnDefinition = "BIT")
     private boolean isWinner;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     @JsonIgnore
     private Team team;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "match_id")
     @JsonIgnore
     private Match match;
 
-    @OneToMany(mappedBy = "teamMatchStats")
+    @OneToMany(mappedBy = "teamMatchStats", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<PlayerMatchStats> players;
+
+    @Transient
+    @JsonIgnore
+    private List<PlayerMatchStats> bowlers;
 
     public void addRuns(int runs) {
         this.totalRuns += runs;

@@ -29,27 +29,22 @@ public class Inning {
     @Column(columnDefinition = "int default 0")
     private int totalOvers = 0;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "match_id")
     @JsonIgnore
     private Match match;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "batting_team_id")
     private TeamMatchStats battingTeam;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bowling_team_id")
     private TeamMatchStats bowlingTeam;
 
     @OneToMany(mappedBy = "inning", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Over> overs;
-
-    // List to store bowlers
-    @Transient  // Not stored in the database
-    private List<PlayerMatchStats> bowlers;
-
 
     public void addRuns(int runs){
         this.totalRuns += runs;

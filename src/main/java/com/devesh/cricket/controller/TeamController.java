@@ -23,22 +23,80 @@ public class TeamController {
     }
 
     @PostMapping
-    public ResponseEntity<Team> createTeam(@RequestBody Team team) {
-        return new ResponseEntity<>(teamService.createTeam(team), HttpStatus.CREATED);
+    public ResponseEntity<?> createTeam(@RequestBody Team team) {
+        try {
+            Team createdTeam = teamService.createTeam(team);
+            if(createdTeam == null) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build();
+            }
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(createdTeam);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<Team>> getAllTeams() {
-        return new ResponseEntity<>(teamService.getAllTeam(), HttpStatus.OK);
+    public ResponseEntity<?> getAllTeams() {
+        try {
+            List<Team> teams = teamService.getAllTeam();
+            if(teams == null || teams.isEmpty()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .build();
+            }
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(teams);
+        }
+        catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
     }
 
     @GetMapping("/id/{teamId}")
-    public ResponseEntity<Team> getTeamById(@PathVariable Long teamId) {
-        return new ResponseEntity<>(teamService.getTeamById(teamId), HttpStatus.OK);
+    public ResponseEntity<?> getTeamById(@PathVariable Long teamId) {
+        try {
+            Team team = teamService.getTeamById(teamId);
+            if(team == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .build();
+            }
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(team);
+        }
+        catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
     }
 
     @GetMapping("/name/{teamName}")
-    public ResponseEntity<Team> getTeamByName(@PathVariable String teamName) {
-        return new ResponseEntity<>(teamService.getTeamByName(teamName), HttpStatus.OK);
+    public ResponseEntity<?> getTeamByName(@PathVariable String teamName) {
+        try {
+            Team team = teamService.getTeamByName(teamName);
+            if(team == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .build();
+            }
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(team);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
     }
 }

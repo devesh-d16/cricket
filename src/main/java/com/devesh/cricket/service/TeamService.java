@@ -4,21 +4,17 @@ import com.devesh.cricket.model.Player;
 import com.devesh.cricket.model.Team;
 import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class TeamService {
-
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
-
-    public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
-        this.teamRepository = teamRepository;
-        this.playerRepository = playerRepository;
-    }
 
     public Team createTeam(Team team) {
         Team newTeam = new Team();

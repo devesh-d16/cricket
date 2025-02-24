@@ -18,7 +18,7 @@ public class Team {
 
     private String teamName;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Player> players;
 

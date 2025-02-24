@@ -2,9 +2,11 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.dto.ResultDTO;
 import com.devesh.cricket.model.Inning;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ResultService {
 
     public ResultDTO evaluateResult(Inning firstInnings, Inning secondInnings) {

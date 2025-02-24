@@ -27,12 +27,11 @@ public class Match {
     @Column(columnDefinition = "BIT")
     private boolean isCompleted = false;
 
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team1_id")
     private TeamMatchStats team1;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team2_id")
     private TeamMatchStats team2;
 
@@ -40,7 +39,7 @@ public class Match {
     @JsonIgnore
     private List<Inning> innings;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "winning_team_id")
     private TeamMatchStats winningTeam;
 }

@@ -2,6 +2,7 @@ package com.devesh.cricket.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 @Getter
 @Setter
@@ -20,15 +21,15 @@ public class Ball {
     @Column(columnDefinition = "BIT")
     private boolean isWicket;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "over_id")
     private Over over;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "batsman_stats_id")
     private PlayerMatchStats batsman;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bowler_stats_id")
     private PlayerMatchStats bowler;
 }

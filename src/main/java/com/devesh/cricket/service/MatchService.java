@@ -10,12 +10,15 @@ import com.devesh.cricket.repository.MatchRepository;
 
 import com.devesh.cricket.repository.PlayerMatchStatsRepository;
 import com.devesh.cricket.repository.TeamMatchStatsRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MatchService {
 
     private final TeamService teamService;
@@ -27,89 +30,67 @@ public class MatchService {
     private final TeamMatchStatsRepository teamMatchStatsRepository;
     private final PlayerMatchStatsRepository playerMatchStatsRepository;
 
-    public MatchService(TeamService teamService,
-                        InningService inningService,
-                        ResultService resultService, TeamMatchStatService teamMatchStatService,
-                        MatchRepository matchRepository,
-                        InningRepository inningRepository,
-                        TeamMatchStatsRepository teamMatchStatsRepository,
-                        PlayerMatchStatsRepository playerMatchStatsRepository
-    ) {
-        this.teamService = teamService;
-        this.inningService = inningService;
-        this.resultService = resultService;
-        this.teamMatchStatService = teamMatchStatService;
-        this.matchRepository = matchRepository;
-        this.inningRepository = inningRepository;
-        this.teamMatchStatsRepository = teamMatchStatsRepository;
-        this.playerMatchStatsRepository = playerMatchStatsRepository;
-    }
-
     public Match startMatch(StartMatchRequestDTO startMatchRequestDTO) {
         TeamMatchStats team1 = initializeTeamMatchStats(startMatchRequestDTO.getTeam1Id());
         TeamMatchStats team2 = initializeTeamMatchStats(startMatchRequestDTO.getTeam2Id());
 
         int overs = startMatchRequestDTO.getOvers();
 
-        List<PlayerMatchStats> bowlersTeam1 = team1.getPlayers().stream().filter(
-                playerMatchStats -> (playerMatchStats.getPlayerRole() == PlayerRole.BOWLER)
-        ).toList();
-        System.out.println("bowlersTeam1: " + bowlersTeam1);
-
-        System.out.println(team2.getPlayers());
-        List<PlayerMatchStats> bowlersTeam2 = team2.getPlayers().stream().filter(
-                playerMatchStats -> (playerMatchStats.getPlayerRole() == PlayerRole.BOWLER)
-        ).toList();
-        System.out.println("bowlersTeam2: " + bowlersTeam2);
-
         Match match = createMatch(team1, team2, overs);
 
-        List<Inning> inningList = new ArrayList<>();
+        List<Inning> inningList =new ArrayList<>();
 
-        Inning firstInnings = simulateInning(match, team1, team2, bowlersTeam2, -1);
+        Inning firstInnings = simulateInning(match, team1, team2, -1);
         inningList.add(firstInnings);
-        Inning secondInnings = simulateInning(match, team2, team1, bowlersTeam1, firstInnings.getTotalRuns());
+        Inning secondInnings = simulateInning(match, team2, team1, firstInnings.getTotalRuns());
         inningList.add(secondInnings);
 
         match.setInnings(inningList);
 
-        matchResult(match, firstInnings, secondInnings);
+        matchResult(match, inningList.getFirst(), inningList.getLast());
 
-        updateTeamStats(team1);
-        updateTeamStats(team2);
+        System.out.println(team1.getPlayers());
+        System.out.println(team2.getPlayers());
+
         return matchRepository.save(match);
     }
 
 
     public TeamMatchStats initializeTeamMatchStats(Long teamId) {
-        TeamMatchStats teamMatchStats = new TeamMatchStats(); // will store the stats for the match
-        Team team = teamService.getTeamById(teamId); // real team class retrieval
+        Team team = teamService.getTeamById(teamId);
+        List<Player> teamPlayers = team.getPlayers();
 
-        teamMatchStats.setTeam(team); // set stats belong to which team
-        teamMatchStats.setTeamName(team.getTeamName()); // store team name
+        TeamMatchStats teamMatchStats = new TeamMatchStats();
 
-        List<PlayerMatchStats> players = team.getPlayers().stream()
-                .map(player ->
-                {
-                    PlayerMatchStats playerMatch = new PlayerMatchStats();
-                    playerMatch.setPlayer(player);
-                    playerMatch.setPlayerName(player.getPlayerName());
-                    playerMatch.setPlayerRole(player.getPlayerRole());
-                    playerMatchStatsRepository.save(playerMatch);
-                    return playerMatch;
-                }
-        ).toList();
-        teamMatchStats.setPlayers(players);
+        teamMatchStats.setTeam(team);
+        teamMatchStats.setTeamName(team.getTeamName());
 
-        teamMatchStats.reset(); // to reset the stat for each new match
+        teamMatchStats.setPlayers(new ArrayList<>());
+        List<PlayerMatchStats> matchPlayers = teamPlayers.stream()
+                .map(player -> {
+                            PlayerMatchStats matchPlayer = new PlayerMatchStats();
+                            matchPlayer.setPlayer(player);
+                            matchPlayer.setPlayerName(player.getPlayerName());
+                            matchPlayer.setPlayerRole(player.getPlayerRole());
+                            matchPlayer.setTeamMatchStats(teamMatchStats);
+                            playerMatchStatsRepository.save(matchPlayer);
+                            return matchPlayer;
+                        }
+                ).collect(Collectors.toList());
+        teamMatchStats.setPlayers(matchPlayers);
+
+        teamMatchStats.setBowlers(new ArrayList<>());
+        List<PlayerMatchStats> bowlers = matchPlayers.stream()
+                .filter(playerMatchStats -> (playerMatchStats.getPlayerRole() == PlayerRole.BOWLER)
+        ).collect(Collectors.toList());
+        teamMatchStats.setBowlers(bowlers);
+
+        teamMatchStats.reset();
         teamMatchStatsRepository.save(teamMatchStats);
-        teamMatchStats.getPlayers().forEach(player -> player.setTeamMatchStats(teamMatchStats));
         return teamMatchStats;
     }
 
-
     public Match createMatch(TeamMatchStats team1, TeamMatchStats team2, int overs) {
-
         Match match = new Match();
         match.setTeam1(team1);
         match.setTeam2(team2);
@@ -124,20 +105,18 @@ public class MatchService {
     }
 
 
-    public Inning simulateInning(Match match, TeamMatchStats battingTeam, TeamMatchStats bowlingTeam, List<PlayerMatchStats> bowlers, int targetRuns) {
+    public Inning simulateInning(Match match, TeamMatchStats battingTeam, TeamMatchStats bowlingTeam, int targetRuns) {
 
         Inning inning = new Inning();
         inning.setMatch(match);
         inning.setBattingTeam(battingTeam);
         inning.setBowlingTeam(bowlingTeam);
-        inning.setBowlers(bowlers);
 
-        inningRepository.save(inning);
-
-        inningService.startInnings(inning, battingTeam, bowlingTeam, inning.getBowlers(), targetRuns);
+        inningService.startInnings(inning, battingTeam, bowlingTeam, targetRuns);
 
         battingTeam.setTotalOvers(inning.getTotalOvers());
         battingTeam.setTotalWickets(inning.getTotalWickets());
+        inningRepository.save(inning);
         return inning;
     }
 
@@ -156,27 +135,6 @@ public class MatchService {
         match.setWinningCondition(result.getWinningCondition());
     }
 
-
-    public void updateTeamStats(TeamMatchStats teamMatchStats) {
-        playerMatchStatsRepository.saveAll(teamMatchStats.getPlayers());
-    }
-
-    public List<Match> getAllMatches() {
-        return matchRepository.findAll();
-    }
-
-    public Match getMatchById(Long matchId) {
-        return matchRepository.getMatchByMatchId(matchId);
-    }
-
-    public List<Match> getAllMatchesByTeamId(Long teamId) {
-        return teamMatchStatService.getAllMatchesByTeamId(teamId);
-    }
-
-    public Team getWinnerByMatchId(Long matchId) {
-        Match match = matchRepository.getMatchByMatchId(matchId);
-        return match.getWinningTeam().getTeam();
-    }
 }
 
 

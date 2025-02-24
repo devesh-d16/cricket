@@ -1,11 +1,9 @@
 package com.devesh.cricket.model;
 
 import com.devesh.cricket.enums.PlayerRole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 
 
 @Getter
@@ -40,11 +38,11 @@ public class PlayerMatchStats {
     @Column(length = 20)
     private PlayerRole playerRole;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "player_id")
     private Player player;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_stats_id")
     private TeamMatchStats teamMatchStats;
 
