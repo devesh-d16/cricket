@@ -1,4 +1,4 @@
-package com.devesh.cricket.model;
+package com.devesh.cricket.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -14,33 +14,33 @@ public class TeamMatchStats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teamMatchStatsId;
+    private Long id;
 
-    private String teamName;
-
-    @Column(columnDefinition = "int default 0")
-    private int totalRuns = 0;
+    private String name;
 
     @Column(columnDefinition = "int default 0")
-    private int totalWickets = 0;
+    private int runs;
 
     @Column(columnDefinition = "int default 0")
-    private int totalOvers = 0;
+    private int wickets;
+
+    @Column(columnDefinition = "int default 0")
+    private int overs;
 
     @Column(columnDefinition = "BIT")
     private boolean isWinner;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     @JsonIgnore
     private Team team;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "match_id")
     @JsonIgnore
     private Match match;
 
-    @OneToMany(mappedBy = "teamMatchStats", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teamMatchStats", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<PlayerMatchStats> players;
 
@@ -49,17 +49,17 @@ public class TeamMatchStats {
     private List<PlayerMatchStats> bowlers;
 
     public void addRuns(int runs) {
-        this.totalRuns += runs;
+        this.runs += runs;
     }
 
     public void incrementWickets() {
-        this.totalWickets++;
+        this.wickets++;
     }
 
     public void reset(){
-        this.totalRuns = 0;
-        this.totalWickets = 0;
-        this.totalOvers = 0;
+        this.runs = 0;
+        this.wickets = 0;
+        this.overs = 0;
         for(PlayerMatchStats p : players){
             p.setBallsBowled(0);
             p.setBallsFaced(0);

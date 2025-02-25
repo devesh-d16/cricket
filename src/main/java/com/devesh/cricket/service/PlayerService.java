@@ -1,9 +1,10 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.model.Player;
-import com.devesh.cricket.model.Team;
+import com.devesh.cricket.entity.Player;
+import com.devesh.cricket.entity.Team;
 import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
+import com.devesh.cricket.utils.GameUtil;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,13 @@ public class PlayerService {
                 () -> new IllegalArgumentException("Team not found")
         );
 
-        if(team.getPlayers().size() >= 11){
+        if(team.getPlayers().size() > GameUtil.MAX_PLAYERS){
             throw new IllegalArgumentException("Team already has 11 players");
         }
 
         Player newPlayer = new Player();
-        newPlayer.setPlayerName(player.getPlayerName());
-        newPlayer.setPlayerRole(player.getPlayerRole());
+        newPlayer.setName(player.getName());
+        newPlayer.setRole(player.getRole());
         newPlayer.setTeam(team);
         playerRepository.save(newPlayer);
 
@@ -38,8 +39,8 @@ public class PlayerService {
     public Player createPlayer(Player player) {
 
         Player newPlayer = new Player();
-        newPlayer.setPlayerName(player.getPlayerName());
-        newPlayer.setPlayerRole(player.getPlayerRole());
+        newPlayer.setName(player.getName());
+        newPlayer.setRole(player.getRole());
         playerRepository.save(newPlayer);
 
         return newPlayer;
@@ -58,8 +59,8 @@ public class PlayerService {
         if (playerToUpdate == null) {
             throw new IllegalArgumentException("Player not found");
         }
-        playerToUpdate.setPlayerName(player.getPlayerName());
-        playerToUpdate.setPlayerRole(player.getPlayerRole());
+        playerToUpdate.setName(player.getName());
+        playerToUpdate.setRole(player.getRole());
         playerRepository.save(playerToUpdate);
         return playerToUpdate;
     }

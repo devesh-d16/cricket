@@ -1,12 +1,12 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.model.Inning;
-import com.devesh.cricket.model.Over;
-import com.devesh.cricket.model.PlayerMatchStats;
-import com.devesh.cricket.model.TeamMatchStats;
+import com.devesh.cricket.entity.Inning;
+import com.devesh.cricket.entity.Over;
+import com.devesh.cricket.entity.PlayerMatchStats;
+import com.devesh.cricket.entity.TeamMatchStats;
+import com.devesh.cricket.model.StrikePair;
 import com.devesh.cricket.repository.InningRepository;
 import com.devesh.cricket.repository.OverRepository;
-import com.devesh.cricket.utils.StrikePair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ public class InningService {
             bowlerIndex = (bowlerIndex + 1) % bowlingTeam.getBowlers().size();
         }
 
-        inning.setOvers(overs);
+        inning.setAllOvers(overs);
         inningRepository.save(inning);
     }
 
@@ -52,7 +52,7 @@ public class InningService {
 
     private Over createOver(Inning inning, int overNumber, PlayerMatchStats bowler) {
         Over over = new Over();
-        over.setOverNumber(overNumber);
+        over.setOverNo(overNumber);
         over.setInning(inning);
         over.setBowler(bowler);
         return over;

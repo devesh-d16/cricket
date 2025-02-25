@@ -1,7 +1,7 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.model.Player;
-import com.devesh.cricket.model.Team;
+import com.devesh.cricket.entity.Player;
+import com.devesh.cricket.entity.Team;
 import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class TeamService {
 
     public Team createTeam(Team team) {
         Team newTeam = new Team();
-        newTeam.setTeamName(team.getTeamName());
+        newTeam.setName(team.getName());
         teamRepository.save(team);
         return team;
     }

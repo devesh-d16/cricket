@@ -1,6 +1,6 @@
 package com.devesh.cricket.repository;
 
-import com.devesh.cricket.model.PlayerMatchStats;
+import com.devesh.cricket.entity.PlayerMatchStats;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

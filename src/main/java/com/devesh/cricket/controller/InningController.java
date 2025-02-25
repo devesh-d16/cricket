@@ -1,7 +1,7 @@
 package com.devesh.cricket.controller;
 
-import com.devesh.cricket.model.Inning;
-import com.devesh.cricket.service.queryService.InningsQueryService;
+import com.devesh.cricket.entity.Inning;
+import com.devesh.cricket.dao.InningsDAO;
 import com.devesh.cricket.service.TeamService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,13 @@ import java.util.List;
 public class InningController {
 
     private final TeamService teamService;
-    private final InningsQueryService inningsQueryService;
+    private final InningsDAO inningsDAO;
 
 
     @GetMapping
     public ResponseEntity<?> getAllInnings(){
         try{
-            List<Inning> innings = inningsQueryService.getAllInnings();
+            List<Inning> innings = inningsDAO.getAllInnings();
             if(innings.isEmpty()){
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -45,7 +45,7 @@ public class InningController {
     @GetMapping("/{inningId}")
     public ResponseEntity<?> getInningById(@PathVariable Long inningId){
         try{
-            Inning inning = inningsQueryService.getInningById(inningId);
+            Inning inning = inningsDAO.getInningById(inningId);
             if(inning == null){
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -64,7 +64,7 @@ public class InningController {
     @GetMapping("/match/{matchId}")
     public ResponseEntity<?> getInningByMatchId(@PathVariable Long matchId){
         try{
-            List<Inning> innings = inningsQueryService.getInningsByMatch(matchId);
+            List<Inning> innings = inningsDAO.getInningsByMatch(matchId);
             if(innings.isEmpty()){
                 return ResponseEntity.
                         status(HttpStatus.NOT_FOUND)

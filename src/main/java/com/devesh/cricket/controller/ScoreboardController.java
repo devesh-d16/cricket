@@ -2,7 +2,7 @@ package com.devesh.cricket.controller;
 
 import com.devesh.cricket.dto.ScoreboardDTO;
 import com.devesh.cricket.dto.TeamScoreboardDTO;
-import com.devesh.cricket.service.queryService.ScoreboardQueryService;
+import com.devesh.cricket.dao.ScoreboardDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ScoreboardController {
 
-    private final ScoreboardQueryService scoreboardQueryService;
+    private final ScoreboardDAO scoreboardDAO;
 
     @GetMapping("/match/{matchId}")
     public ResponseEntity<?> getMatchScoreboard(@PathVariable("matchId") Long matchId) {
         try{
-            ScoreboardDTO scoreboardDTO = scoreboardQueryService.findScoreboardByMatchId(matchId);
+            ScoreboardDTO scoreboardDTO = scoreboardDAO.findScoreboardByMatchId(matchId);
             if(scoreboardDTO == null) {
                 return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
+                        .status(HttpStatus.BAD_REQUEST)
                         .build();
             }
             return ResponseEntity
@@ -41,7 +41,7 @@ public class ScoreboardController {
     @GetMapping("/team/{teamId}/match/{matchId}")
     public ResponseEntity<?> getTeamScoreboardByMatchId(@PathVariable("teamId") Long teamId, @PathVariable("matchId") Long matchId) {
         try {
-            TeamScoreboardDTO teamScoreboardDTO = scoreboardQueryService.findTeamScoreboardByMatchId(teamId, matchId);
+            TeamScoreboardDTO teamScoreboardDTO = scoreboardDAO.findTeamScoreboardByMatchId(teamId, matchId);
             if(teamScoreboardDTO == null) {
                 return ResponseEntity
                         .status(HttpStatus.NO_CONTENT)

@@ -1,6 +1,6 @@
-package com.devesh.cricket.service.queryService;
+package com.devesh.cricket.dao;
 
-import com.devesh.cricket.model.Inning;
+import com.devesh.cricket.entity.Inning;
 import com.devesh.cricket.repository.InningRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class InningsQueryService {
+public class InningsDAO {
     private final InningRepository inningRepository;
 
     public List<Inning> getAllInnings() {

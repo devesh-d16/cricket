@@ -1,7 +1,6 @@
-package com.devesh.cricket.model;
+package com.devesh.cricket.entity;
 
 
-import com.devesh.cricket.enums.PlayerRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,43 +17,43 @@ public class Inning {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long inningsId;
+    private Long id;
 
     @Column(columnDefinition = "int default 0")
-    private int totalRuns = 0;
+    private int runs;
 
     @Column(columnDefinition = "int default 0")
-    private int totalWickets = 0;
+    private int wickets;
 
     @Column(columnDefinition = "int default 0")
-    private int totalOvers = 0;
+    private int overs;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "match_id")
     @JsonIgnore
     private Match match;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "batting_team_id")
     private TeamMatchStats battingTeam;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "bowling_team_id")
     private TeamMatchStats bowlingTeam;
 
-    @OneToMany(mappedBy = "inning", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "inning", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Over> overs;
+    private List<Over> allOvers;
 
     public void addRuns(int runs){
-        this.totalRuns += runs;
+        this.runs += runs;
     }
 
     public void incrementWickets(){
-        this.totalWickets++;
+        this.wickets++;
     }
 
     public void addOvers(){
-        this.totalOvers++;
+        this.overs++;
     }
 }

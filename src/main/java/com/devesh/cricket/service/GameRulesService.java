@@ -1,9 +1,9 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.model.Inning;
-import com.devesh.cricket.model.PlayerMatchStats;
-import com.devesh.cricket.model.TeamMatchStats;
-import com.devesh.cricket.utils.StrikePair;
+import com.devesh.cricket.entity.Inning;
+import com.devesh.cricket.entity.PlayerMatchStats;
+import com.devesh.cricket.entity.TeamMatchStats;
+import com.devesh.cricket.model.StrikePair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class GameRulesService {
 
     public boolean gameEnd(TeamMatchStats batting, Inning inning, int targetRun) {
-        return (inning.getTotalWickets() >= 10 || (targetRun != -1 && batting.getTotalRuns() > targetRun));
+        return (inning.getWickets() >= 10 || (targetRun != -1 && batting.getRuns() > targetRun));
     }
 
     public void swapStrikers(StrikePair strikePair) {

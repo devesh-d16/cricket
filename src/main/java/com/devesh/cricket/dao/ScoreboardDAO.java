@@ -1,16 +1,15 @@
-package com.devesh.cricket.service.queryService;
+package com.devesh.cricket.dao;
 
 import com.devesh.cricket.dto.PlayerScoreboardDTO;
 import com.devesh.cricket.dto.ScoreboardDTO;
 import com.devesh.cricket.dto.TeamScoreboardDTO;
-import com.devesh.cricket.model.Match;
-import com.devesh.cricket.model.PlayerMatchStats;
-import com.devesh.cricket.model.TeamMatchStats;
+import com.devesh.cricket.entity.Match;
+import com.devesh.cricket.entity.PlayerMatchStats;
+import com.devesh.cricket.entity.TeamMatchStats;
 import com.devesh.cricket.repository.MatchRepository;
 import com.devesh.cricket.repository.PlayerMatchStatsRepository;
 import com.devesh.cricket.repository.TeamMatchStatsRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ScoreboardQueryService {
+public class ScoreboardDAO {
     private final TeamMatchStatsRepository teamMatchStatsRepository;
     private final PlayerMatchStatsRepository playerMatchStatsRepository;
     private final MatchRepository matchRepository;
@@ -28,10 +27,10 @@ public class ScoreboardQueryService {
         ScoreboardDTO scoreboardDTO = new ScoreboardDTO();
         Match match = matchRepository.findById(matchId).orElse(null);
         if(match != null){
-            scoreboardDTO.setMatchId(match.getMatchId());
+            scoreboardDTO.setMatchId(match.getId());
             scoreboardDTO.setTeam1(match.getTeam1());
             scoreboardDTO.setTeam2(match.getTeam2());
-            scoreboardDTO.setWinner(match.getWinningTeam().getTeamName());
+            scoreboardDTO.setWinner(match.getWinner().getName());
             scoreboardDTO.setWinningMargin(match.getWinningCondition());
             return scoreboardDTO;
         }
@@ -43,10 +42,10 @@ public class ScoreboardQueryService {
         Match match = matchRepository.findById(matchId).orElse(null);
 
         TeamMatchStats teamMatchStat = null;
-        if(match.getTeam1().getTeam().getTeamId().equals(teamId)){
+        if(match.getTeam1().getTeam().getId().equals(teamId)){
             teamMatchStat = match.getTeam1();
         }
-        else if(match.getTeam2().getTeam().getTeamId().equals(teamId)){
+        else if(match.getTeam2().getTeam().getId().equals(teamId)){
             teamMatchStat = match.getTeam2();
         }
 
@@ -54,7 +53,7 @@ public class ScoreboardQueryService {
         List<PlayerScoreboardDTO> playersDTO = new ArrayList<>();
         for(PlayerMatchStats p : players){
             PlayerScoreboardDTO player = new PlayerScoreboardDTO();
-            player.setPlayerName(p.getPlayerName());
+            player.setPlayerName(p.getName());
             player.setPlayerRole(p.getPlayerRole());
             player.setRunsScored(p.getRunsScored());
             player.setBallsFaced(p.getBallsFaced());
@@ -65,9 +64,9 @@ public class ScoreboardQueryService {
         }
 
         TeamScoreboardDTO teamScoreboardDTO = new TeamScoreboardDTO();
-        teamScoreboardDTO.setTeamName(teamMatchStat.getTeamName());
-        teamScoreboardDTO.setTotalRuns(teamMatchStat.getTotalRuns());
-        teamScoreboardDTO.setTotalWickets(teamMatchStat.getTotalWickets());
+        teamScoreboardDTO.setTeamName(teamMatchStat.getName());
+        teamScoreboardDTO.setTotalRuns(teamMatchStat.getRuns());
+        teamScoreboardDTO.setTotalWickets(teamMatchStat.getWickets());
         teamScoreboardDTO.setPlayers(playersDTO);
         return teamScoreboardDTO;
     }

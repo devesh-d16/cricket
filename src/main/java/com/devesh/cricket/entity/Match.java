@@ -1,6 +1,6 @@
-package com.devesh.cricket.model;
+package com.devesh.cricket.entity;
 
-import com.devesh.cricket.enums.Status;
+import com.devesh.cricket.enums.MatchStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,9 +17,9 @@ public class Match {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long matchId;
+    private Long id;
 
-    private Status matchStatus;
+    private MatchStatus matchStatus;
     private int overs;
     private int winningMargin;
     private String winningCondition;
@@ -27,19 +27,19 @@ public class Match {
     @Column(columnDefinition = "BIT")
     private boolean isCompleted = false;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "team1_id")
     private TeamMatchStats team1;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "team2_id")
     private TeamMatchStats team2;
 
-    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Inning> innings;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "winning_team_id")
-    private TeamMatchStats winningTeam;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "winner_id")
+    private TeamMatchStats winner;
 }

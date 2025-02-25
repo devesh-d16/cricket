@@ -1,7 +1,6 @@
 package com.devesh.cricket.repository;
 
-import com.devesh.cricket.model.Ball;
-import com.devesh.cricket.model.Match;
+import com.devesh.cricket.entity.Ball;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

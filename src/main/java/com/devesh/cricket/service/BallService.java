@@ -1,15 +1,13 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.model.Ball;
-import com.devesh.cricket.model.Inning;
-import com.devesh.cricket.model.PlayerMatchStats;
-import com.devesh.cricket.model.TeamMatchStats;
+import com.devesh.cricket.entity.Ball;
+import com.devesh.cricket.entity.Inning;
+import com.devesh.cricket.entity.PlayerMatchStats;
+import com.devesh.cricket.entity.TeamMatchStats;
 import com.devesh.cricket.enums.PlayerRole;
-import com.devesh.cricket.utils.StrikePair;
+import com.devesh.cricket.model.StrikePair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +48,7 @@ public class BallService {
         inning.incrementWickets();
         batting.incrementWickets();
 
-        ball.setRunsScored(0);
+        ball.setRuns(0);
         ball.setWicket(true);
 
         if (!gameRulesService.gameEnd(batting, inning, targetRun) && strikePair.getNextBat() <= 10) {
@@ -60,7 +58,7 @@ public class BallService {
     }
 
     public void handleRun(Inning inning, Ball ball, int run, TeamMatchStats batting, StrikePair strikePair, PlayerMatchStats bowler) {
-        ball.setRunsScored(run);
+        ball.setRuns(run);
 
         batting.addRuns(run);
         inning.addRuns(run);

@@ -1,8 +1,7 @@
 package com.devesh.cricket.dto;
 
 
-import com.devesh.cricket.model.Team;
-import com.devesh.cricket.model.TeamMatchStats;
+import com.devesh.cricket.entity.TeamMatchStats;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

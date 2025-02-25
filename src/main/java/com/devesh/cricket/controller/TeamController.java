@@ -1,7 +1,6 @@
 package com.devesh.cricket.controller;
 
-
-import com.devesh.cricket.model.Team;
+import com.devesh.cricket.entity.Team;
 import com.devesh.cricket.service.PlayerService;
 import com.devesh.cricket.service.TeamService;
 import org.springframework.http.HttpStatus;

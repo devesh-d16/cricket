@@ -1,7 +1,7 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.dto.ResultDTO;
-import com.devesh.cricket.model.Inning;
+import com.devesh.cricket.entity.Inning;
+import com.devesh.cricket.model.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,30 +9,30 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ResultService {
 
-    public ResultDTO evaluateResult(Inning firstInnings, Inning secondInnings) {
-        ResultDTO resultDTO = new ResultDTO();
+    public Result evaluateResult(Inning firstInnings, Inning secondInnings) {
+        Result result = new Result();
 
-        int runsScoredByTeam1 = firstInnings.getTotalRuns();
-        int runsScoredByTeam2 = secondInnings.getTotalRuns();
+        int runsScoredByTeam1 = firstInnings.getRuns();
+        int runsScoredByTeam2 = secondInnings.getRuns();
 
         if(runsScoredByTeam1 > runsScoredByTeam2){
             int runs = runsScoredByTeam1 - runsScoredByTeam2;
-            resultDTO.setWinningTeam(firstInnings.getBattingTeam());
-            resultDTO.setWinningMargin(runs);
-            resultDTO.setWinningCondition(firstInnings.getBattingTeam().getTeamName() + " won the game by " + String.valueOf(runs) + " runs.");
+            result.setWinner(firstInnings.getBattingTeam());
+            result.setWinningMargin(runs);
+            result.setWinningCondition(firstInnings.getBattingTeam().getName() + " won the game by " + runs + " runs.");
         }
         else if(runsScoredByTeam1 < runsScoredByTeam2){
-            int wicketsMargin = 10 - secondInnings.getTotalWickets();
-            resultDTO.setWinningTeam(secondInnings.getBattingTeam());
-            resultDTO.setWinningMargin(wicketsMargin);
-            resultDTO.setWinningCondition(secondInnings.getBattingTeam().getTeamName()+ " won the game by " + String.valueOf(wicketsMargin) + " wickets.");
+            int wicketsMargin = 10 - secondInnings.getWickets();
+            result.setWinner(secondInnings.getBattingTeam());
+            result.setWinningMargin(wicketsMargin);
+            result.setWinningCondition(secondInnings.getBattingTeam().getName()+ " won the game by " + wicketsMargin + " wickets.");
         }
         else{
-            resultDTO.setWinningTeam(null);
-            resultDTO.setWinningMargin(0);
-            resultDTO.setWinningCondition("Match drawn");
+            result.setWinner(null);
+            result.setWinningMargin(0);
+            result.setWinningCondition("Match drawn");
         }
 
-        return resultDTO;
+        return result;
     }
 }

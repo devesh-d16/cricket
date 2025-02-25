@@ -1,6 +1,6 @@
 package com.devesh.cricket.enums;
 
-public enum Status {
+public enum MatchStatus {
     UPCOMING,
     ONGOING,
     COMPLETED

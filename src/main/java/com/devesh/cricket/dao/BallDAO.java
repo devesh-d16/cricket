@@ -1,7 +1,7 @@
-package com.devesh.cricket.service.queryService;
+package com.devesh.cricket.dao;
 
-import com.devesh.cricket.model.Ball;
-import com.devesh.cricket.model.Over;
+import com.devesh.cricket.entity.Ball;
+import com.devesh.cricket.entity.Over;
 import com.devesh.cricket.repository.BallRepository;
 import com.devesh.cricket.repository.OverRepository;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BallQueryService {
+public class BallDAO {
     private final BallRepository ballRepository;
     private final OverRepository overRepository;
 

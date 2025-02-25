@@ -1,7 +1,7 @@
 package com.devesh.cricket.controller;
 
-import com.devesh.cricket.model.Ball;
-import com.devesh.cricket.service.queryService.BallQueryService;
+import com.devesh.cricket.entity.Ball;
+import com.devesh.cricket.dao.BallDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,12 @@ import java.util.List;
 @RequestMapping("/apis/balls")
 @RequiredArgsConstructor
 public class BallController {
-    private final BallQueryService ballQueryService;
+    private final BallDAO ballDao;
 
     @GetMapping
     public ResponseEntity<?> getAllBalls(){
         try {
-            List<Ball> balls = ballQueryService.getAllBall();
+            List<Ball> balls = ballDao.getAllBall();
             if(balls.isEmpty()) {
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -40,7 +40,7 @@ public class BallController {
     @GetMapping("/{ballId}")
     public ResponseEntity<?> getBallById(@PathVariable Long ballId) {
         try {
-            Ball ball = ballQueryService.getBallById(ballId);
+            Ball ball = ballDao.getBallById(ballId);
             if(ball == null){
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -57,7 +57,7 @@ public class BallController {
     @GetMapping("/over/{overId}")
     public ResponseEntity<?> getBallByOverId(@PathVariable Long overId) {
         try{
-            List<Ball> balls = ballQueryService.getBallByOverId(overId);
+            List<Ball> balls = ballDao.getBallByOverId(overId);
             if(balls.isEmpty()){
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)

@@ -1,6 +1,5 @@
-package com.devesh.cricket.model;
+package com.devesh.cricket.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
@@ -15,34 +14,33 @@ public class Over {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long overId;
+    private Long id;
 
-    private int overNumber;
-
-    @Column(columnDefinition = "int default 0")
-    private int runsScored = 0;
+    private int overNo;
 
     @Column(columnDefinition = "int default 0")
-    private int wicketsInTheOver = 0;
+    private int runs;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Column(columnDefinition = "int default 0")
+    private int wickets;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "inning_id")
     private Inning inning;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bowler_stats_id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "bowler_id")
     private PlayerMatchStats bowler;
 
     @OneToMany(mappedBy = "over", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Ball> balls;
 
     public void addRuns(int runs){
-        this.runsScored += runs;
+        this.runs += runs;
     }
 
     public void addWicket(){
-        this.wicketsInTheOver++;
+        this.wickets++;
     }
 }
 

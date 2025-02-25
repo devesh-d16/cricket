@@ -1,6 +1,6 @@
-package com.devesh.cricket.utils;
+package com.devesh.cricket.model;
 
-import com.devesh.cricket.model.PlayerMatchStats;
+import com.devesh.cricket.entity.PlayerMatchStats;
 import lombok.Getter;
 
 @Getter

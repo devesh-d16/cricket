@@ -2,9 +2,9 @@ package com.devesh.cricket.controller;
 
 
 import com.devesh.cricket.dto.StartMatchRequestDTO;
-import com.devesh.cricket.model.Match;
-import com.devesh.cricket.model.Team;
-import com.devesh.cricket.service.queryService.MatchQueryService;
+import com.devesh.cricket.entity.Match;
+import com.devesh.cricket.entity.Team;
+import com.devesh.cricket.dao.MatchDAO;
 import com.devesh.cricket.service.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MatchController {
 
-    private final MatchQueryService matchQueryService;
+    private final MatchDAO matchDAO;
     private final MatchService matchService;
 
     @PostMapping("/start")
@@ -45,7 +45,7 @@ public class MatchController {
     @GetMapping
     public ResponseEntity<?> getAllMatches(){
         try {
-            List<Match> matches = matchQueryService.getAllMatches();
+            List<Match> matches = matchDAO.getAllMatches();
             if (matches == null) {
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -65,7 +65,7 @@ public class MatchController {
     @GetMapping("/{matchId}")
     public ResponseEntity<?> getMatchById(@PathVariable Long matchId){
         try{
-            Match match = matchQueryService.getMatchById(matchId);
+            Match match = matchDAO.getMatchById(matchId);
             if (match == null) {
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -85,7 +85,7 @@ public class MatchController {
     @GetMapping("/{matchId}/winner")
     public ResponseEntity<?> getWinnerByMatchId(@PathVariable Long matchId){
         try{
-            Team winner = matchQueryService.getWinnerByMatchId(matchId);
+            Team winner = matchDAO.getWinnerByMatchId(matchId);
             if (winner == null) {
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -94,6 +94,47 @@ public class MatchController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(winner);
+        }
+        catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/status/completed")
+    public ResponseEntity<?> getCompletedMatches(){
+        try {
+            List<Match> matches = matchDAO.getAllCompletedMatches();
+            if (matches == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .build();
+            }
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(matches);
+        }
+        catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/team/{teamId}/winner")
+    public ResponseEntity<?> getAllMatchesWonByTeam(@PathVariable Long teamId){
+        try{
+            List<Match> matches = matchDAO.findAllMatchWonByTeam(teamId);
+            if(matches == null || matches.isEmpty()) {
+                return ResponseEntity
+                        .status(HttpStatus.NO_CONTENT)
+                        .body("Team has not won any matches");
+            }
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(matches);
+
         }
         catch (Exception e) {
             return ResponseEntity

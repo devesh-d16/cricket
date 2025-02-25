@@ -1,7 +1,6 @@
 package com.devesh.cricket.dto;
 
 
-import com.devesh.cricket.model.PlayerMatchStats;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

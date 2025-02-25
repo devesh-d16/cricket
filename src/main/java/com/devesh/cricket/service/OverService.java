@@ -1,9 +1,9 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.config.GameConfig;
-import com.devesh.cricket.model.*;
+import com.devesh.cricket.model.StrikePair;
+import com.devesh.cricket.utils.GameUtil;
+import com.devesh.cricket.entity.*;
 import com.devesh.cricket.repository.BallRepository;
-import com.devesh.cricket.utils.StrikePair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +21,12 @@ public class OverService {
     public void simulateOver(Inning inning, Over over, TeamMatchStats batting, int targetRun, StrikePair strikePair, PlayerMatchStats bowler) {
         List<Ball> balls = new ArrayList<>();
 
-        for (int ballNumber = 1; ballNumber <= GameConfig.BALLS_PER_OVER && !gameRulesService.gameEnd(batting, inning, targetRun); ballNumber++) {
+        for (int ballNumber = 1; ballNumber <= GameUtil.BALLS_PER_OVER && !gameRulesService.gameEnd(batting, inning, targetRun); ballNumber++) {
             Ball newBall = createBall(over, ballNumber, bowler);
             ballService.simulateBall(inning, newBall, batting, strikePair, targetRun, bowler);
 
             handleWicket(newBall, over, bowler);
-            over.addRuns(newBall.getRunsScored());
+            over.addRuns(newBall.getRuns());
 
             ballRepository.save(newBall);
             balls.add(newBall);
@@ -39,7 +39,7 @@ public class OverService {
     private Ball createBall(Over over, int ballNumber, PlayerMatchStats bowler) {
         Ball ball = new Ball();
         ball.setOver(over);
-        ball.setBallNumber(ballNumber);
+        ball.setBallNo(ballNumber);
         ball.setBowler(bowler);
         return ball;
     }

@@ -1,8 +1,7 @@
 package com.devesh.cricket.repository;
 
-import com.devesh.cricket.model.Over;
+import com.devesh.cricket.entity.Over;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
