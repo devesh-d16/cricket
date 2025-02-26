@@ -1,7 +1,7 @@
 package com.devesh.cricket.controller;
 
 
-import com.devesh.cricket.dto.StartMatchRequestDTO;
+import com.devesh.cricket.dto.StartMatchDTO;
 import com.devesh.cricket.entity.Match;
 import com.devesh.cricket.entity.Team;
 import com.devesh.cricket.dao.MatchDAO;
@@ -23,9 +23,9 @@ public class MatchController {
     private final MatchService matchService;
 
     @PostMapping("/start")
-    public ResponseEntity<?> startMatch(@RequestBody StartMatchRequestDTO startMatchRequestDTO){
+    public ResponseEntity<?> startMatch(@RequestBody StartMatchDTO startMatchDTO){
         try {
-            Match match = matchService.startMatch(startMatchRequestDTO);
+            Match match = matchService.startMatch(startMatchDTO);
             if (match == null) {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)

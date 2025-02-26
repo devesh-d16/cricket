@@ -1,6 +1,4 @@
-package com.devesh.cricket.config;
-
-import com.mysql.cj.MysqlConnection;
+package com.devesh.cricket.config.DbConnection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,10 +6,9 @@ import java.util.Map;
 public class DatabaseConnectionFactory {
     private static final Map<String, DatabaseConnection> connectionPool = new HashMap<>();
 
-    public static DatabaseConnection getDatabaseConnection(String dbType,
-                                                           String url,
-                                                           String username,
-                                                           String password) {
+    private DatabaseConnectionFactory() {}
+
+    public static DatabaseConnection getDatabaseConnection(String dbType, String url, String username, String password) {
         if (connectionPool.containsKey(dbType)) {
             return connectionPool.get(dbType);
         }

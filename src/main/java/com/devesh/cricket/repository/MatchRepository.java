@@ -10,11 +10,10 @@ import java.util.List;
 
 @Repository
 public interface MatchRepository extends JpaRepository<Match, Long> {
-    Match getMatchByMatchId(Long matchId);
 
-    List<Match> getAllByMatchIdIs(Long matchId);
+    Match getMatchById(Long id);
 
     List<Match> getMatchesByMatchStatus(MatchStatus matchStatus);
 
-    List<Match> getMatchesByWinningTeam_Team(Team winningTeamTeam);
+    List<Match> getMatchesByWinner_Team(Team winnerTeam);
 }

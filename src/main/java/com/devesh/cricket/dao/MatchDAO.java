@@ -33,7 +33,7 @@ public class MatchDAO {
     }
 
     public Match getMatchById(Long matchId) {
-        return matchRepository.getMatchByMatchId(matchId);
+        return matchRepository.getMatchById(matchId);
     }
 
     public List<Match> getAllMatchesByTeamId(Long teamId) {
@@ -41,7 +41,7 @@ public class MatchDAO {
     }
 
     public Team getWinnerByMatchId(Long matchId) {
-        Match match = matchRepository.getMatchByMatchId(matchId);
+        Match match = matchRepository.getMatchById(matchId);
         return match.getWinner().getTeam();
     }
 
@@ -54,6 +54,6 @@ public class MatchDAO {
         if(team == null) {
             return Collections.emptyList();
         }
-        return matchRepository.getMatchesByWinningTeam_Team(team);
+        return matchRepository.getMatchesByWinner_Team(team);
     }
 }

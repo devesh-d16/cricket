@@ -22,6 +22,6 @@ public class OverDAO {
     }
 
     public List<Over> getOverByInningId(Long inningId) {
-        return overRepository.findDistinctByInning_InningsId(inningId);
+        return overRepository.findOversByInning_Id(inningId);
     }
 }

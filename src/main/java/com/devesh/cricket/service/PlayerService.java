@@ -2,6 +2,9 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.entity.Player;
 import com.devesh.cricket.entity.Team;
+import com.devesh.cricket.exceptions.PlayerNotFoundException;
+import com.devesh.cricket.exceptions.TeamLimitExceededException;
+import com.devesh.cricket.exceptions.TeamNotFoundException;
 import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
 import com.devesh.cricket.utils.GameUtil;
@@ -19,12 +22,10 @@ public class PlayerService {
 
     public Player createPlayer(Long teamId, Player player) {
 
-        Team team = teamRepository.findById(teamId).orElseThrow(
-                () -> new IllegalArgumentException("Team not found")
-        );
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("Team with id " + teamId + " not found."));
 
         if(team.getPlayers().size() > GameUtil.MAX_PLAYERS){
-            throw new IllegalArgumentException("Team already has 11 players");
+            throw new TeamLimitExceededException("Team already has 11 players");
         }
 
         Player newPlayer = new Player();
@@ -51,11 +52,11 @@ public class PlayerService {
     }
 
     public Player getPlayerById(Long playerId) {
-        return playerRepository.findById(playerId).orElse(null);
+        return playerRepository.findById(playerId).orElseThrow(() -> new PlayerNotFoundException("Player with id " + playerId + " not found."));
     }
 
     public Player updatePlayer(Long playerId, Player player) {
-        Player playerToUpdate = playerRepository.findById(playerId).orElse(null);
+        Player playerToUpdate = playerRepository.findById(playerId).orElseThrow(() -> new PlayerNotFoundException("Player with id " + playerId + " not found."));
         if (playerToUpdate == null) {
             throw new IllegalArgumentException("Player not found");
         }
@@ -70,16 +71,13 @@ public class PlayerService {
     }
 
     public List<Player> getPlayersByTeam(Long teamId) {
-        Team team = teamRepository.findById(teamId).orElseThrow(null);
-        if(team != null){
-            return team.getPlayers();
-        }
-        return null;
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("Team with id " + teamId + " not found."));
+        return team.getPlayers();
     }
 
     public List<Player> addPlayersToTeam(Long teamId, List<Player> players) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new RuntimeException("Team not found"));
+                .orElseThrow(() -> new TeamNotFoundException("Team with id " + teamId + " not found."));
         for (Player player : players) {
             player.setTeam(team);
         }

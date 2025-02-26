@@ -2,13 +2,14 @@ package com.devesh.cricket.service;
 
 import com.devesh.cricket.entity.Player;
 import com.devesh.cricket.entity.Team;
+import com.devesh.cricket.exceptions.PlayerNotFoundException;
+import com.devesh.cricket.exceptions.TeamNotFoundException;
 import com.devesh.cricket.repository.PlayerRepository;
 import com.devesh.cricket.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +25,11 @@ public class TeamService {
     }
 
     public Team addToTeam(Long teamId, Long playerId) {
-        Player player = playerRepository.findById(playerId).orElse(null);
-        Team team = teamRepository.findById(teamId).orElse(null);
-        if (team == null) {
-            team = new Team();
-        }
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new PlayerNotFoundException("Player with id " + playerId + " not found"));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("Team with " + teamId + " not found."));
         team.getPlayers().add(player);
-        return teamRepository.save(team);
+        teamRepository.save(team);
+        return team;
     }
 
     public List<Team> getAllTeam() {
@@ -38,11 +37,10 @@ public class TeamService {
     }
 
     public Team getTeamById(Long teamId) {
-        return teamRepository.findById(teamId).orElse(null);
+        return teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("Team with id " + teamId + " not found."));
     }
 
     public Team getTeamByName(String teamName) {
-        return teamRepository.findByTeamName(teamName);
+        return teamRepository.findByName(teamName).orElseThrow(() -> new TeamNotFoundException("Team with name " + teamName + " not found."));
     }
-
 }

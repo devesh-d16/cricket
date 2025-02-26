@@ -1,4 +1,4 @@
-package com.devesh.cricket.config;
+package com.devesh.cricket.config.DbConnection;
 
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 

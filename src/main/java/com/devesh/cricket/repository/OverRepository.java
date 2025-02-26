@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface OverRepository extends JpaRepository<Over, Long> {
-    List<Over> findDistinctByInning_InningsId(Long inningInningsId);
+    List<Over> findOversByInning_Id(Long inningId);
 }

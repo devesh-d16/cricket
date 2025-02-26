@@ -32,7 +32,6 @@ public class ResultService {
             result.setWinningMargin(0);
             result.setWinningCondition("Match drawn");
         }
-
         return result;
     }
 }

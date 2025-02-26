@@ -17,7 +17,7 @@ public class TeamMatchStatService {
     private final MatchRepository matchRepository;
 
     public List<Match> getAllMatchesByTeamId(Long teamId) {
-        TeamMatchStats teamMatchStats = teamMatchStatsRepository.getTeamMatchStatsByTeam_TeamId(teamId);
-        return new ArrayList<>(matchRepository.getAllByMatchIdIs(teamMatchStats.getMatch().getId()));
+        TeamMatchStats teamMatchStats = teamMatchStatsRepository.getAllById(teamId);
+        return null;
     }
 }

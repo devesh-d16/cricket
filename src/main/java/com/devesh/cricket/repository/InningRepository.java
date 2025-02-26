@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface InningRepository extends JpaRepository<Inning, Long> {
-    List<Inning> getAllByInningsId(Long inningsId);
 
-    List<Inning> getAllByMatch_MatchId(Long matchMatchId);
+    List<Inning> getAllByMatch_Id(Long matchId);
 }

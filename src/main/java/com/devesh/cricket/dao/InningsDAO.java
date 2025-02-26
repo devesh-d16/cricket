@@ -21,6 +21,6 @@ public class InningsDAO {
     }
 
     public List<Inning> getInningsByMatch(Long matchId) {
-        return inningRepository.getAllByMatch_MatchId(matchId);
+        return inningRepository.getAllByMatch_Id(matchId);
     }
 }
