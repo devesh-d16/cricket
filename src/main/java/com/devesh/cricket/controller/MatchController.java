@@ -1,10 +1,11 @@
 package com.devesh.cricket.controller;
 
 
-import com.devesh.cricket.dto.StartMatchDTO;
-import com.devesh.cricket.entity.Match;
-import com.devesh.cricket.entity.Team;
+import com.devesh.cricket.config.responseHandlers.ApiResponse;
+import com.devesh.cricket.dto.MatchRequestDTO;
 import com.devesh.cricket.dao.MatchDAO;
+import com.devesh.cricket.dto.MatchUpdateDTO;
+import com.devesh.cricket.entitySql.Match;
 import com.devesh.cricket.service.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,124 +23,83 @@ public class MatchController {
     private final MatchDAO matchDAO;
     private final MatchService matchService;
 
+    // done
     @PostMapping("/start")
-    public ResponseEntity<?> startMatch(@RequestBody StartMatchDTO startMatchDTO){
-        try {
-            Match match = matchService.startMatch(startMatchDTO);
-            if (match == null) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(match);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<?> startMatch(@RequestBody MatchRequestDTO matchRequestDTO){
+       return new ResponseEntity<>(matchService.startMatch(matchRequestDTO), HttpStatus.CREATED);
     }
 
+    // done
     @GetMapping
     public ResponseEntity<?> getAllMatches(){
-        try {
-            List<Match> matches = matchDAO.getAllMatches();
-            if (matches == null) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(matches);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+        List<Match> matches = matchDAO.getAllMatches();
+        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
     }
 
-    @GetMapping("/{matchId}")
-    public ResponseEntity<?> getMatchById(@PathVariable Long matchId){
-        try{
-            Match match = matchDAO.getMatchById(matchId);
-            if (match == null) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(match);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    // done
+    @GetMapping("/id/{id}")
+    public ResponseEntity<?> getMatchById(@PathVariable Long id){
+        Match match = matchDAO.getMatchById(id);
+        return new ResponseEntity<>( matchService.getMatchResponse(match), HttpStatus.OK);
     }
 
-    @GetMapping("/{matchId}/winner")
-    public ResponseEntity<?> getWinnerByMatchId(@PathVariable Long matchId){
-        try{
-            Team winner = matchDAO.getWinnerByMatchId(matchId);
-            if (winner == null) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(winner);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    // done
+    @GetMapping("/{id}/winner")
+    public ResponseEntity<?> getWinnerByMatchId(@PathVariable Long id){
+        return new ResponseEntity<>(matchDAO.getWinnerByMatchId(id), HttpStatus.OK);
     }
 
-    @GetMapping("/status/completed")
-    public ResponseEntity<?> getCompletedMatches(){
-        try {
-            List<Match> matches = matchDAO.getAllCompletedMatches();
-            if (matches == null) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(matches);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    // done
+    @GetMapping("/status")
+    public ResponseEntity<?> getCompletedMatches(@RequestParam String matchStatus){
+        List<Match> matches = matchDAO.getMatchesByMatchStatus(matchStatus);
+        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
     }
 
-    @GetMapping("/team/{teamId}/winner")
-    public ResponseEntity<?> getAllMatchesWonByTeam(@PathVariable Long teamId){
-        try{
-            List<Match> matches = matchDAO.findAllMatchWonByTeam(teamId);
-            if(matches == null || matches.isEmpty()) {
-                return ResponseEntity
-                        .status(HttpStatus.NO_CONTENT)
-                        .body("Team has not won any matches");
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(matches);
+    // done
+    @GetMapping("/id/{id}/scoreboard")
+    public ResponseEntity<?> getMatchScoreboard(@PathVariable Long id){
+        return new ResponseEntity<>(matchDAO.getMatchScoreboard(id), HttpStatus.OK);
+    }
 
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    // done
+    @GetMapping("/teams/id/{id}")
+    public ResponseEntity<?> getMatchByTeamId(@PathVariable Long id){
+        List<Match> matchList = matchDAO.getMatchByTeamId(id);
+        return new ResponseEntity<>(matchService.convertToList(matchList), HttpStatus.OK);
+    }
+
+    // done
+    @GetMapping("/teams/name/{name}")
+    public ResponseEntity<?> getMatchByTeamId(@PathVariable String name){
+        List<Match> matchList = matchDAO.getMatchByTeamName(name);
+        return new ResponseEntity<>(matchService.convertToList(matchList), HttpStatus.OK);
+    }
+
+    // done
+    @GetMapping("/teams")
+    public ResponseEntity<?> getMatchByTeamPlayed(@RequestParam Long team1Id, @RequestParam Long team2Id){
+        List<Match> matches = matchDAO.getMatchByTeamPlayedId(team1Id, team2Id);
+        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+    }
+
+    // done
+    @GetMapping("/teams/name")
+    public ResponseEntity<?> getMatchByTeamPlayed(@RequestParam String team1Name, @RequestParam String team2Name){
+        List<Match> matches = matchDAO.getMatchByTeamPlayedName(team1Name, team2Name);
+        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+    }
+
+    // done
+    @PutMapping("/id/{id}")
+    public ResponseEntity<?> updateMatch(@RequestBody MatchUpdateDTO matchUpdateDTO, @PathVariable Long id){
+        return new ResponseEntity<>(matchDAO.updateMatch(id, matchUpdateDTO), HttpStatus.OK);
+    }
+
+    // done
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<?> deleteMatchById(@PathVariable Long id){
+        matchDAO.deleteMatchById(id);
+        return ResponseEntity.noContent().build();
     }
 }

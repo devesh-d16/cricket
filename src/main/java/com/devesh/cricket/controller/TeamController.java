@@ -1,7 +1,6 @@
 package com.devesh.cricket.controller;
 
-import com.devesh.cricket.entity.Team;
-import com.devesh.cricket.service.PlayerService;
+import com.devesh.cricket.entitySql.Team;
 import com.devesh.cricket.service.TeamService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,88 +13,43 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
-    private final PlayerService playerService;
 
-    public TeamController(TeamService teamService, PlayerService playerService) {
+    public TeamController(TeamService teamService) {
         this.teamService = teamService;
-        this.playerService = playerService;
     }
 
     @PostMapping
     public ResponseEntity<?> createTeam(@RequestBody Team team) {
-        try {
-            Team createdTeam = teamService.createTeam(team);
-            if(createdTeam == null) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(createdTeam);
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+        return new ResponseEntity<>(teamService.createTeam(team), HttpStatus.CREATED);
+    }
+    @GetMapping("/id/{teamId}")
+    public ResponseEntity<?> getTeamById(@PathVariable Long teamId){
+        return new ResponseEntity<>(teamService.getTeamById(teamId), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<?> getAllTeams() {
-        try {
-            List<Team> teams = teamService.getAllTeam();
-            if(teams == null || teams.isEmpty()) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(teams);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/id/{teamId}")
-    public ResponseEntity<?> getTeamById(@PathVariable Long teamId) {
-        try {
-            Team team = teamService.getTeamById(teamId);
-            if(team == null) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(team);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+        return new ResponseEntity<>(teamService.getAllTeam(), HttpStatus.OK);
     }
 
     @GetMapping("/name/{teamName}")
     public ResponseEntity<?> getTeamByName(@PathVariable String teamName) {
-        try {
-            Team team = teamService.getTeamByName(teamName);
-            if(team == null) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(team);
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+        return new ResponseEntity<>(teamService.getTeamByName(teamName), HttpStatus.OK);
+    }
+
+    @PutMapping("/id/{teamId}")
+    public ResponseEntity<?> updateTeam(@PathVariable Long teamId, @RequestBody Team team) {
+        return new ResponseEntity<>(teamService.updateTeam(teamId, team), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/id/{teamId}")
+    public ResponseEntity<?> deleteTeam(@PathVariable Long teamId) {
+        return new ResponseEntity<>(teamService.deleteTeamById(teamId), HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/addAll")
+    public ResponseEntity<?> addTeams(@RequestBody List<Team> teams){
+        teamService.addTeams(teams);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

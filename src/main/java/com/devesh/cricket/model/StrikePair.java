@@ -1,12 +1,12 @@
 package com.devesh.cricket.model;
 
-import com.devesh.cricket.entity.PlayerMatchStats;
+import com.devesh.cricket.entitySql.PlayerStats;
 import lombok.Getter;
 
 @Getter
 public class StrikePair {
-    public PlayerMatchStats playerOnStrike;
-    public PlayerMatchStats playerOffStrike;
+    public PlayerStats playerOnStrike;
+    public PlayerStats playerOffStrike;
     private int nextBat = 2;
 
 
@@ -14,7 +14,7 @@ public class StrikePair {
         this.nextBat++;
     }
 
-    public StrikePair(PlayerMatchStats playerOnStrike, PlayerMatchStats playerOffStrike) {
+    public StrikePair(PlayerStats playerOnStrike, PlayerStats playerOffStrike) {
         this.playerOnStrike = playerOnStrike;
         this.playerOffStrike = playerOffStrike;
     }

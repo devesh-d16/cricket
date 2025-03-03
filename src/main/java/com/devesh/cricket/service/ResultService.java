@@ -1,6 +1,6 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.entity.Inning;
+import com.devesh.cricket.entitySql.Inning;
 import com.devesh.cricket.model.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,13 @@ public class ResultService {
             int runs = runsScoredByTeam1 - runsScoredByTeam2;
             result.setWinner(firstInnings.getBattingTeam());
             result.setWinningMargin(runs);
-            result.setWinningCondition(firstInnings.getBattingTeam().getName() + " won the game by " + runs + " runs.");
+            result.setWinningCondition(firstInnings.getBattingTeam().getTeam().getTeamName() + " won the game by " + runs + " runs.");
         }
         else if(runsScoredByTeam1 < runsScoredByTeam2){
             int wicketsMargin = 10 - secondInnings.getWickets();
             result.setWinner(secondInnings.getBattingTeam());
             result.setWinningMargin(wicketsMargin);
-            result.setWinningCondition(secondInnings.getBattingTeam().getName()+ " won the game by " + wicketsMargin + " wickets.");
+            result.setWinningCondition(secondInnings.getBattingTeam().getTeam().getTeamName()+ " won the game by " + wicketsMargin + " wickets.");
         }
         else{
             result.setWinner(null);

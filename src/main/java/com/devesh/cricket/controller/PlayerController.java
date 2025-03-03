@@ -1,6 +1,6 @@
 package com.devesh.cricket.controller;
 
-import com.devesh.cricket.entity.Player;
+import com.devesh.cricket.entitySql.Player;
 import com.devesh.cricket.service.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,138 +18,46 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    @PostMapping("/{teamId}/players")
-    public ResponseEntity<?> createPlayer(@PathVariable Long teamId, @RequestBody Player player) {
-        try {
-            Player createdPlayer = playerService.createPlayer(teamId, player);
-            if(createdPlayer == null) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(createdPlayer);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/{teamId}")
-    public ResponseEntity<?> addPlayersToTeam(@PathVariable Long teamId, @RequestBody List<Player> players) {
-        try {
-            List<Player> addedPlayers = playerService.addPlayersToTeam(teamId, players);
-            if(addedPlayers == null || addedPlayers.size() != 11) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(addedPlayers);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    @PostMapping
+    public ResponseEntity<?> createPlayer(@RequestBody Player player) {
+        Player newPlayer = playerService.createPlayer(player);
+        return new ResponseEntity<>(newPlayer, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllPlayers() {
-        try {
-            List<Player> players = playerService.getAllPlayers();
-            if(players == null || players.size() == 0) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(players);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<?> getAllPlayer() {
+        return new ResponseEntity<>(playerService.getAllPlayers(), HttpStatus.OK);
     }
 
-    @GetMapping("/{playerId}")
-    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId) {
-        try {
-            Player player = playerService.getPlayerById(playerId);
-            if(player == null) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(player);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    @GetMapping("/id/{playerId}")
+    public ResponseEntity<?> getPlayerById(@PathVariable Long playerId){
+        return new ResponseEntity<>(playerService.getPlayerById(playerId), HttpStatus.OK);
     }
 
-    @PutMapping("/{playerId}")
+    @GetMapping("/name/{teamName}")
+    public ResponseEntity<?> getPlayerByName(@PathVariable String teamName){
+        return new ResponseEntity<>(playerService.getPlayerByName(teamName) , HttpStatus.OK);
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<?> getPlayerByRole(@RequestParam String playerRole){
+        return new ResponseEntity<>(playerService.getPlayerByRole(playerRole), HttpStatus.OK);
+    }
+
+    @PutMapping("/id/{playerId}")
     public ResponseEntity<?> updatePlayer(@PathVariable Long playerId, @RequestBody Player player) {
-        try {
-            Player updatedPlayer = playerService.updatePlayer(playerId, player);
-            if(updatedPlayer == null) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(updatedPlayer);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+        Player updatedPlayer = playerService.updatePlayer(playerId, player);
+        return new ResponseEntity<>(updatedPlayer, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{playerId}")
+    @DeleteMapping("/id/{playerId}")
     public ResponseEntity<?> deletePlayer(@PathVariable Long playerId) {
-        try {
-            playerService.deletePlayer(playerId);
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body("Player deleted successfully");
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+        return new ResponseEntity<>(playerService.deletePlayer(playerId), HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{teamId}/players")
-    public ResponseEntity<?> getPlayersByTeam(@PathVariable Long teamId) {
-        try {
-            List<Player> players = playerService.getPlayersByTeam(teamId);
-            if(players == null || players.isEmpty()) {
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build();
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(players);
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    @PostMapping("/addAll")
+    public ResponseEntity<?> addPlayers(@RequestBody List<Player> players){
+        playerService.addPlayers(players);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
