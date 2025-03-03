@@ -16,4 +16,6 @@ public interface MatchSqlRepository extends JpaRepository<Match, Long> {
     List<Match> getMatchesByMatchStatus(MatchStatus matchStatus);
 
     List<Match> getMatchesByWinner_Team(Team winnerTeam);
+
+    List<Match> getMatchesByVenue(String venue);
 }

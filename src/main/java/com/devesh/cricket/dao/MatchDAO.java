@@ -126,4 +126,18 @@ public class MatchDAO {
         matchSqlRepository.save(match);
         return match;
     }
+
+    public List<Match> getMatchesByVenue(String venue) {
+        return matchSqlRepository.getMatchesByVenue(venue);
+    }
+
+    public List<Match> getMatchByWinnerTeamId(Long id) {
+        Team team = teamService.getTeamById(id);
+        return getAllMatches().stream().filter(match -> match.getWinner().getTeam().equals(team)).collect(Collectors.toList());
+    }
+
+    public List<Match> getMatchByWinnerTeamName(String name) {
+        Team team = teamService.getTeamByName(name);
+        return getAllMatches().stream().filter(match -> match.getWinner().getTeam().equals(team)).collect(Collectors.toList());
+    }
 }
