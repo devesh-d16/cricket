@@ -51,7 +51,7 @@ public class MatchService {
         // list to store both innings
         List<Inning> inningList = new ArrayList<>();
 
-        Inning firstInnings = simulateInning(match, team1, team2, -1);  // (targetRuns for first innings = -1)
+        Inning firstInnings = simulateInning(match, team1, team2, -1);
         inningList.add(firstInnings);
 
         Inning secondInnings = simulateInning(match, team2, team1, firstInnings.getRuns());

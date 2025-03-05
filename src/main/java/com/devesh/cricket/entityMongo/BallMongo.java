@@ -1,5 +1,6 @@
 package com.devesh.cricket.entityMongo;
 
+import jakarta.persistence.Embedded;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,6 +22,7 @@ public class BallMongo {
     private boolean isWicket;
 
     @Field("over_id")
+    @Embedded
     private Long overId;
 
     @Field("batsman_id")

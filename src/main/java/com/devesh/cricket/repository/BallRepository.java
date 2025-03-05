@@ -1,6 +1,7 @@
 package com.devesh.cricket.repository;
 
-//public interface BallRepository {
-//    String getRepoType();
-//    BallSql save(BallSql ballSql);
-//}
+import com.devesh.cricket.entitySql.Ball;
+
+public interface BallRepository {
+    Ball save(Ball ball);
+}

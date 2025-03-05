@@ -23,9 +23,6 @@ public class MatchMongo {
     @Field("overs")
     private int overs;
 
-    @Field("winning_margin")
-    private int winningMargin;
-
     @Field("winning_condition")
     private String winningCondition;
 

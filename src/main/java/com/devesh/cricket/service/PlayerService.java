@@ -31,10 +31,7 @@ public class PlayerService {
         }
 
         try {
-            Player newPlayer = new Player();
-            newPlayer.setPlayerRole(player.getPlayerRole());
-            newPlayer.setPlayerName(player.getPlayerName());
-            return playerRepository.save(newPlayer);
+            return playerRepository.save(player);
         }
         catch (DataAccessException e) {
             throw new SystemException("Error while creating player '" + player.getPlayerName() + "'. Please try again.");

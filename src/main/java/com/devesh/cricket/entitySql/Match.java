@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "match_details")
+
 public class Match {
 
     @Id
