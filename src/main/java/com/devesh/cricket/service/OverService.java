@@ -1,7 +1,7 @@
 package com.devesh.cricket.service;
 import com.devesh.cricket.model.StrikePair;
 import com.devesh.cricket.utils.GameUtil;
-import com.devesh.cricket.entitySql.*;
+import com.devesh.cricket.entity.*;
 import com.devesh.cricket.repositorySql.BallSqlRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

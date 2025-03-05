@@ -1,4 +1,4 @@
-package com.devesh.cricket.entitySql;
+package com.devesh.cricket.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

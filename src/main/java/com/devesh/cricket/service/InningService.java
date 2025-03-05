@@ -1,9 +1,9 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.entitySql.Inning;
-import com.devesh.cricket.entitySql.Over;
-import com.devesh.cricket.entitySql.PlayerStats;
-import com.devesh.cricket.entitySql.TeamStats;
+import com.devesh.cricket.entity.Inning;
+import com.devesh.cricket.entity.Over;
+import com.devesh.cricket.entity.PlayerStats;
+import com.devesh.cricket.entity.TeamStats;
 import com.devesh.cricket.model.StrikePair;
 import com.devesh.cricket.repositorySql.InningSqlRepository;
 import com.devesh.cricket.repositorySql.OverSqlRepository;

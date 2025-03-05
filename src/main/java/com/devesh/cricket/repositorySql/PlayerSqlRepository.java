@@ -1,6 +1,6 @@
 package com.devesh.cricket.repositorySql;
 
-import com.devesh.cricket.entitySql.Player;
+import com.devesh.cricket.entity.Player;
 import com.devesh.cricket.enums.PlayerRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

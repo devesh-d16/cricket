@@ -1,6 +1,6 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.entitySql.Inning;
+import com.devesh.cricket.entity.Inning;
 import com.devesh.cricket.model.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

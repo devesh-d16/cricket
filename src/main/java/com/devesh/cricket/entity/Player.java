@@ -1,4 +1,4 @@
-package com.devesh.cricket.entitySql;
+package com.devesh.cricket.entity;
 
 import com.devesh.cricket.enums.PlayerRole;
 import jakarta.persistence.*;

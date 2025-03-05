@@ -4,8 +4,9 @@ package com.devesh.cricket.controller;
 import com.devesh.cricket.dto.MatchRequestDTO;
 import com.devesh.cricket.dao.MatchDAO;
 import com.devesh.cricket.dto.MatchUpdateDTO;
-import com.devesh.cricket.entitySql.Match;
+import com.devesh.cricket.entity.Match;
 import com.devesh.cricket.service.MatchService;
+import com.devesh.cricket.utils.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class MatchController {
 
     private final MatchDAO matchDAO;
     private final MatchService matchService;
+    private final Mapper mapper;
 
     // done
     @PostMapping("/start")
@@ -32,28 +34,28 @@ public class MatchController {
     @GetMapping
     public ResponseEntity<?> getAllMatches(){
         List<Match> matches = matchDAO.getAllMatches();
-        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matches), HttpStatus.OK);
     }
 
     // done
     @GetMapping("/id/{id}")
     public ResponseEntity<?> getMatchById(@PathVariable Long id){
         Match match = matchDAO.getMatchById(id);
-        return new ResponseEntity<>( matchService.getMatchResponse(match), HttpStatus.OK);
+        return new ResponseEntity<>( mapper.getMatchResponse(match), HttpStatus.OK);
     }
 
     // done
     @GetMapping("/venue")
     public ResponseEntity<?> getMatchByVenue(@RequestParam String venue){
         List<Match> matches = matchDAO.getMatchesByVenue(venue);
-        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matches), HttpStatus.OK);
     }
 
     // done
     @GetMapping("/status")
     public ResponseEntity<?> getCompletedMatches(@RequestParam String matchStatus){
         List<Match> matches = matchDAO.getMatchesByMatchStatus(matchStatus);
-        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matches), HttpStatus.OK);
     }
 
     // done
@@ -66,42 +68,42 @@ public class MatchController {
     @GetMapping("/teams/id/{id}")
     public ResponseEntity<?> getMatchByTeamId(@PathVariable Long id){
         List<Match> matchList = matchDAO.getMatchByTeamId(id);
-        return new ResponseEntity<>(matchService.convertToList(matchList), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matchList), HttpStatus.OK);
     }
 
     // done
     @GetMapping("/teams/name/{name}")
     public ResponseEntity<?> getMatchByTeamId(@PathVariable String name){
         List<Match> matchList = matchDAO.getMatchByTeamName(name);
-        return new ResponseEntity<>(matchService.convertToList(matchList), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matchList), HttpStatus.OK);
     }
 
     // done
     @GetMapping("/teams")
     public ResponseEntity<?> getMatchByTeamPlayed(@RequestParam Long team1Id, @RequestParam Long team2Id){
         List<Match> matches = matchDAO.getMatchByTeamPlayedId(team1Id, team2Id);
-        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matches), HttpStatus.OK);
     }
 
     // done
     @GetMapping("/teams/name")
     public ResponseEntity<?> getMatchByTeamPlayed(@RequestParam String team1Name, @RequestParam String team2Name){
         List<Match> matches = matchDAO.getMatchByTeamPlayedName(team1Name, team2Name);
-        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matches), HttpStatus.OK);
     }
 
     // done
     @GetMapping("/teams/{id}/winner")
     public ResponseEntity<?> getMatchByWinnerTeamId(@PathVariable Long id){
         List<Match> matches = matchDAO.getMatchByWinnerTeamId(id);
-        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matches), HttpStatus.OK);
     }
 
     // done
     @GetMapping("/teams/{name}/winner")
     public ResponseEntity<?> getMatchByWinnerTeamId(@PathVariable String name){
         List<Match> matches = matchDAO.getMatchByWinnerTeamName(name);
-        return new ResponseEntity<>(matchService.convertToList(matches), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.convertToList(matches), HttpStatus.OK);
     }
 
     // done

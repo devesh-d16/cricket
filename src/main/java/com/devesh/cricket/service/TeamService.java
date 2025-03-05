@@ -1,7 +1,6 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.entitySql.Player;
-import com.devesh.cricket.entitySql.Team;
+import com.devesh.cricket.entity.Team;
 import com.devesh.cricket.exceptions.DuplicateResourceFoundException;
 import com.devesh.cricket.exceptions.InvalidRequestException;
 import com.devesh.cricket.exceptions.ResourceNotFoundException;
@@ -9,11 +8,7 @@ import com.devesh.cricket.exceptions.SystemException;
 import com.devesh.cricket.repositorySql.TeamSqlRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Collections;
 import java.util.List;

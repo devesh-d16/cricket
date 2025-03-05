@@ -1,8 +1,8 @@
 package com.devesh.cricket.repositorySql;
 
-import com.devesh.cricket.entitySql.Match;
+import com.devesh.cricket.entity.Match;
 import com.devesh.cricket.enums.MatchStatus;
-import com.devesh.cricket.entitySql.Team;
+import com.devesh.cricket.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

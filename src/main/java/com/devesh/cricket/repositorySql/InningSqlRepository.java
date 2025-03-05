@@ -1,6 +1,6 @@
 package com.devesh.cricket.repositorySql;
 
-import com.devesh.cricket.entitySql.Inning;
+import com.devesh.cricket.entity.Inning;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

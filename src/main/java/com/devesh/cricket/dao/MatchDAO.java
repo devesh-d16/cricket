@@ -3,17 +3,17 @@ package com.devesh.cricket.dao;
 
 import com.devesh.cricket.dto.InningsDTO;
 import com.devesh.cricket.dto.MatchUpdateDTO;
-import com.devesh.cricket.entitySql.Inning;
-import com.devesh.cricket.entitySql.Match;
+import com.devesh.cricket.entity.Inning;
+import com.devesh.cricket.entity.Match;
 import com.devesh.cricket.enums.MatchStatus;
-import com.devesh.cricket.entitySql.Team;
+import com.devesh.cricket.entity.Team;
 import com.devesh.cricket.exceptions.GameRuleException;
 import com.devesh.cricket.exceptions.ResourceNotFoundException;
 import com.devesh.cricket.repositorySql.MatchSqlRepository;
-import com.devesh.cricket.repositorySql.PlayerStatsSqlRepository;
 import com.devesh.cricket.repositorySql.TeamSqlRepository;
 import com.devesh.cricket.service.MatchService;
 import com.devesh.cricket.service.TeamService;
+import com.devesh.cricket.utils.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +31,7 @@ public class MatchDAO {
     private final MatchSqlRepository matchSqlRepository;
     private final TeamSqlRepository teamSqlRepository;
     private final TeamService teamService;
+    private final Mapper mapper;
 
 
     public List<Match> getAllMatches() {
@@ -75,8 +76,8 @@ public class MatchDAO {
         List<InningsDTO> inningsDTOs = new ArrayList<>();
         Inning inning1 = match.getInnings().getFirst();
         Inning inning2 = match.getInnings().getLast();
-        inningsDTOs.add(matchService.convertToInningsDTO(inning1));
-        inningsDTOs.add(matchService.convertToInningsDTO(inning2));
+        inningsDTOs.add(mapper.convertToInningsDTO(inning1));
+        inningsDTOs.add(mapper.convertToInningsDTO(inning2));
         return inningsDTOs;
     }
 

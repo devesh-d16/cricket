@@ -1,14 +1,12 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.entitySql.Player;
-import com.devesh.cricket.entitySql.PlayerStats;
+import com.devesh.cricket.entity.Player;
 import com.devesh.cricket.enums.PlayerRole;
 import com.devesh.cricket.exceptions.DuplicateResourceFoundException;
 import com.devesh.cricket.exceptions.InvalidRequestException;
 import com.devesh.cricket.exceptions.ResourceNotFoundException;
 import com.devesh.cricket.exceptions.SystemException;
 import com.devesh.cricket.repositorySql.PlayerSqlRepository;
-import com.devesh.cricket.repositorySql.TeamSqlRepository;
 import lombok.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;

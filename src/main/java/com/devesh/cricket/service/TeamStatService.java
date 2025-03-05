@@ -1,9 +1,8 @@
 package com.devesh.cricket.service;
 
-import com.devesh.cricket.entitySql.Player;
-import com.devesh.cricket.entitySql.PlayerStats;
-import com.devesh.cricket.entitySql.Team;
-import com.devesh.cricket.entitySql.TeamStats;
+import com.devesh.cricket.entity.PlayerStats;
+import com.devesh.cricket.entity.Team;
+import com.devesh.cricket.entity.TeamStats;
 import com.devesh.cricket.repositorySql.TeamStatsSqlRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
